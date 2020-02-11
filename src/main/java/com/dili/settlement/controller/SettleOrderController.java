@@ -31,6 +31,25 @@ public class SettleOrderController {
 
     @Resource
     private SettleRpc settleRpc;
+
+    /**
+     * 跳转到支付页面
+     * @return
+     */
+    @RequestMapping(value = "/forwardPayIndex.html")
+    public String forwardPayIndex() {
+        return "pay/index";
+    }
+
+    /**
+     * 跳转到退款页面
+     * @return
+     */
+    @RequestMapping(value = "/forwardRefundIndex.html")
+    public String forwardRefundIndex() {
+        return "refund/index";
+    }
+
     /**
      * 页面支付接口
      * @param settleOrderDto
