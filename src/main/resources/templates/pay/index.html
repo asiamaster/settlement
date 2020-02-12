@@ -1,0 +1,206 @@
+<#bs4Body>
+
+<div class="container-fluid">
+    <form class="form">
+        <div class="row">
+            <nav class="col-12" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item active" aria-current="page">退款单</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-1">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="" value="option1" checked>
+                    <label class="form-check-label" for="">
+                        客户名称
+                    </label>
+                </div>
+            </div>
+            <div class="col-1">
+                <div class="form-check ">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="" value="option2">
+                    <label class="form-check-label" for="">
+                        证件号
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="sr-only" for=""></label>
+                    <input type="number" class="form-control" id="" placeholder="">
+                </div>
+            </div>
+            <div class="col-1">
+                <button type="button" class="btn btn-primary">刷卡获取</button>
+            </div>
+        </div>
+
+        <div class="">
+            <button type="button" class="btn btn-primary" id="getCustomers">查询</button>
+            <button type="button" class="btn btn-secondary">清空</button>
+        </div>
+    </form>
+
+
+    <hr>
+    <div class="row">
+        <div class="col-1">张三</div>
+        <div class="col-1"> 13512345678</div>
+        <div class="col-2">511620019995654</div>
+        <div class="col-2">四川省成都市人民南路</div>
+    </div>
+
+    <hr>
+
+    <div class="modal" tabindex="-1" role="dialog" id="customerTable">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">选择客户</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="">
+                        <table data-toggle="table" data-url="">
+                            <thead>
+                            <tr>
+                                <th data-align="center" data-checkbox="true"></th>
+                                <th data-align="center">客户名称</th>
+                                <th data-align="center">证件号</th>
+                                <th data-align="center">地址信息</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td>良芳</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">确定</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog" id="paywayModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">结算收费</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+
+                        <div class="row py-3 row-cols-6">
+                            <div class="col">结算金额：</div>
+                            <div class="col">100.00</div>
+                        </div>
+                        <div class="row py-3 row-cols-6">
+                            <div class="col">
+                                结算方式：
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payWay" id="" value="option1"
+                                       checked>
+                                <label class="form-check-label" for="">
+                                    现金
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
+                                <label class="form-check-label" for="">
+                                    POS
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
+                                <label class="form-check-label" for="">
+                                    银行卡转账
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
+                                <label class="form-check-label" for="">
+                                    支付宝
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
+                                <label class="form-check-label" for="">
+                                    微信
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">确定</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+        <table data-toggle="table" data-url="">
+            <thead>
+            <tr>
+                <th data-align="center" data-checkbox="true"></th>
+                <th data-align="center">业务编号</th>
+                <th data-align="center">业务类型</th>
+                <th data-align="center">支付金额</th>
+                <th data-align="center">提交人</th>
+                <th data-align="center">提交人部门</th>
+                <th data-align="center">提交时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td>良芳</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>良芳</td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="py-3 text-center">
+        <button type="button" class="btn btn-primary" id="choicePayway">确定</button>
+    </div>
+
+
+</div>
+
+</#bs4Body>
+
+<#pay_indexJs />
+<script>
+
+
+</script>
