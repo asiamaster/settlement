@@ -25,6 +25,11 @@ public class DepartmentRpc {
     @Value("${uap.domain:uap.diligrp.com}")
     private String domain;
 
+    /**
+     * 远程查询部门列表
+     * @param query
+     * @return
+     */
     public List<Department> list(Department query) {
         String url = domain + "/departmentApi/listByExample.api";
         HttpRequest request = HttpUtil.createPost(url);
