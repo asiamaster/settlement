@@ -32,7 +32,7 @@ public class CustomerController {
      */
     @RequestMapping(value = "/list.action")
     @ResponseBody
-    public BaseOutput<List<Customer>> list(@RequestBody CustomerQuery query) {
+    public BaseOutput<List<Customer>> list(CustomerQuery query) {
         try {
             return customerRpc.list(query);
         } catch (Exception e) {
