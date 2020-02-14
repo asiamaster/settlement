@@ -57,29 +57,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="">
-                        <table id="table-customer-list" data-toggle="table" data-url="">
-                            <thead>
-                            <tr>
-                                <th data-align="center" data-checkbox="true"></th>
-                                <th data-align="center">客户名称</th>
-                                <th data-align="center">证件号</th>
-                                <th data-align="center">地址信息</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td></td>
-                                <td>111111</td>
-                                <td>222222</td>
-                                <td>33333</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="chooseCustomerCompleteHandler();return false">确定</button>
+                    <button type="button" class="btn btn-primary" id="btn-choose-customer">确定</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -96,7 +77,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="container-fluid">
-
                         <div class="row py-3 row-cols-6">
                             <div class="col">结算金额：</div>
                             <div class="col">100.00</div>
@@ -148,38 +128,36 @@
         </div>
     </div>
 
-    <div class="">
-        <table data-toggle="table" data-url="">
+    <div class="" id="settle-order-list">
+        <table id="table-settle-order-list" data-toggle="table" data-title="缴费单列表" data-click-to-select="true"  data-checkbox-header="true" data-unique-id="id" data-icons="bui.variable.icons" data-buttons-class="primary">
             <thead>
                 <tr>
-                    <th data-align="center" data-checkbox="true"></th>
-                    <th data-align="center">业务编号</th>
-                    <th data-align="center">业务类型</th>
-                    <th data-align="center">支付金额</th>
-                    <th data-align="center">提交人</th>
-                    <th data-align="center">提交人部门</th>
-                    <th data-align="center">提交时间</th>
+                    <th data-width-unit="%" data-width="2" data-align="center" data-checkbox="true"></th>
+                    <th data-width-unit="%" data-width="10" data-field="businessCode" data-align="center" data-formatter="businessCodeFormatter">
+                        业务编号
+                    </th>
+                    <th data-width-unit="%" data-width="10" data-field="businessName" data-align="center">
+                        业务类型
+                    </th>
+                    <th data-width-unit="%" data-width="10" data-field="amountView" data-align="center">
+                        支付金额
+                    </th>
+                    <th data-width-unit="%" data-width="10" data-field="submitterName" data-align="center">
+                        提交人
+                    </th>
+                    <th data-width-unit="%" data-width="15" data-field="submitterDepName" data-align="center">
+                        提交人部门
+                    </th>
+                    <th data-width-unit="%" data-width="15" data-field="submitTime" data-align="center">
+                        提交时间
+                    </th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td>良芳</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>良芳</td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
         </table>
     </div>
 
     <div class="py-3 text-center">
-        <button type="button" class="btn btn-primary" id="choicePayway">确定</button>
+        <button type="button" class="btn btn-primary" id="btn-certain-pay">确定</button>
     </div>
 </div>
 </#bs4Body>
