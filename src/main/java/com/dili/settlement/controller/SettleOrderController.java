@@ -12,6 +12,7 @@ import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
 import com.dili.ss.dto.DTOUtils;
 import com.dili.ss.exception.BusinessException;
+import com.dili.ss.util.MoneyUtils;
 import com.dili.uap.sdk.domain.UserTicket;
 import com.dili.uap.sdk.session.SessionContext;
 import org.slf4j.Logger;
@@ -133,7 +134,7 @@ public class SettleOrderController {
             settleOrderDto.setIdList(Stream.of(settleOrderDto.getIds().split(",")).map(id -> Long.parseLong(id)).collect(Collectors.toList()));
             BaseOutput<Long> amountBaseOutput = settleRpc.queryTotalAmount(settleOrderDto);
             if (amountBaseOutput.isSuccess()) {
-                modelMap.addAttribute("totalAmount", amountBaseOutput.getData());
+                modelMap.addAttribute("totalAmount", MoneyUtils.centToYuan(amountBaseOutput.getData()));
             }
             UserTicket userTicket = getUserTicket();
             SettleConfig settleConfig = new SettleConfig();

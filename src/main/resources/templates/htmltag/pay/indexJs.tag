@@ -15,7 +15,18 @@
             idList.push(row.id);
         }
         let url = "/settleOrder/forwardPay.html?ids="+idList.join(",");
-        bs4pop.dialog({content:url, title:'结算收费',isIframe:true,width:700,height:500});
+        bs4pop.dialog({
+            id:'dialog-pay',
+            content:url,
+            title:'结算收费',
+            isIframe:true,
+            width:700,
+            height:400,
+            btns:[
+                {label: '确定',className: 'btn-primary',onClick:function(){}},
+                {label: '取消',className: 'btn-secondary'}
+            ]
+        });
     }
 
     /** 加载客户单据处理器 */
