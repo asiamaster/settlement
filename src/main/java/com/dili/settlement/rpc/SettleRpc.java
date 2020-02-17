@@ -10,6 +10,7 @@ import com.dili.ss.domain.PageOutput;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -19,6 +20,14 @@ import java.util.List;
 
 @FeignClient(name = "settlement-service")
 public interface SettleRpc {
+
+    /**
+     * 根据ID查询结算单
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/api/settleOrder/getById", method = RequestMethod.GET)
+    BaseOutput<SettleOrder> getById(@RequestParam Long id);
 
     /**
      * 查询结算单

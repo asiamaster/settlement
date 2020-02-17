@@ -1,10 +1,10 @@
 <script>
     $(function() {
-        $('#btn-certain-pay').click(payCertainClickHandler);
+        $('#btn-certain-refund').click(refundCertainClickHandler);
     });
 
-    /** 支付页面确定按钮点击事件处理器 */
-    function payCertainClickHandler() {
+    /** 退款页面确定按钮点击事件处理器 */
+    function refundCertainClickHandler() {
         let rows = $('#table-settle-order-list').bootstrapTable('getSelections');
         if (null == rows || rows.length === 0) {
             showWarning('请至少选中一条数据');
@@ -14,11 +14,11 @@
         for (let row of rows) {
             idList.push(row.id);
         }
-        let url = "/settleOrder/forwardPay.html?ids="+idList.join(",");
+        let url = "/settleOrder/forwardRefund.html?ids="+idList.join(",");
         bs4pop.dialog({
-            id:'dialog-pay',
+            id:'dialog-refund',
             content:url,
-            title:'结算收费',
+            title:'退款',
             isIframe:true,
             width:700,
             height:500,
@@ -29,17 +29,17 @@
         });
     }
 
-    /** 支付弹框确定按钮点击事件处理器 */
+    /** 退款弹框确定按钮点击事件处理器 */
     function dialogCertainClickHandler(e, $iframe) {
-        if (!$iframe.contents().find('#form-pay').valid()) {
+        if (!$iframe.contents().find('#form-refund').valid()) {
             return false;
         }
         bui.loading.show('努力提交中，请稍候。。。');
         $.ajax({
             type:"POST",
-            url:"/settleOrder/pay.action",
+            url:"/settleOrder/refund.action",
             dataType:"json",
-            data:$iframe.contents().find('#form-pay').serialize(),
+            data:$iframe.contents().find('#form-refund').serialize(),
             success:function(result) {
                 bui.loading.hide();
                 if (result.code === '200') {
@@ -55,19 +55,9 @@
         });
     }
 
-    /** 加载客户单据处理器 */
+    /** 加载客户退款单据处理器 */
     function loadCustomerOrdersHandler(cusId) {
         $('#settle-order-list').removeClass("d-none");
-        $('#table-settle-order-list').bootstrapTable("refreshOptions", {url:"/settleOrder/listPayOrders.action?customerId="+cusId});
+        $('#table-settle-order-list').bootstrapTable("refreshOptions", {url:"/settleOrder/listRefundOrders.action?customerId="+cusId});
     }
-
-    //时间范围
-    lay('.laydatetime').each(function() {
-        laydate.render({
-            elem : this
-            ,trigger : 'click'
-            ,range: true
-        });
-    });
-    // bs4pop.alert('当前共缴费 '+ 5 +' 笔业务，'+ 2 + '笔成功，票据正在打印中...',undefined, function(){  })
 </script>

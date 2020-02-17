@@ -1,5 +1,6 @@
 package com.dili.settlement.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.dili.settlement.domain.UrlConfig;
 import com.dili.settlement.enums.UrlTypeEnum;
 import com.dili.settlement.rpc.SettleRpc;
@@ -38,7 +39,7 @@ public class UrlConfigController {
             if (!baseOutput.isSuccess()) {
                 return;
             }
-            StringBuilder builder = new StringBuilder(baseOutput.getData());
+            StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
             builder.append("?businessType=").append(businessType).append("&businessCode=").append(businessCode);
             response.setStatus(302);
             response.setHeader("Location", builder.toString());

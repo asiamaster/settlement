@@ -1,12 +1,16 @@
 package com.dili.settlement.controller;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.dili.settlement.component.PayDispatchHandler;
+import com.dili.settlement.component.RefundDispatchHandler;
 import com.dili.settlement.domain.SettleConfig;
 import com.dili.settlement.domain.SettleOrder;
+import com.dili.settlement.domain.UrlConfig;
+import com.dili.settlement.dto.PrintDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
 import com.dili.settlement.enums.*;
+import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
@@ -40,6 +44,15 @@ public class SettleOrderController {
 
     @Resource
     private SettleRpc settleRpc;
+
+    @Resource
+    private PayDispatchHandler payDispatchHandler;
+
+    @Resource
+    private RefundDispatchHandler refundDispatchHandler;
+
+    @Resource
+    private BusinessRpc businessRpc;
 
     /**
      * 跳转到支付页面
@@ -154,6 +167,21 @@ public class SettleOrderController {
     }
 
     /**
+     * 跳转到支付个性化页面
+     * @param settleOrderDto
+     * @return
+     */
+    @RequestMapping(value = "/forwardPaySpecial.html")
+    public String forwardPaySpecial(SettleOrderDto settleOrderDto, ModelMap modelMap) {
+        try {
+            return payDispatchHandler.forwardSpecial(settleOrderDto, modelMap);
+        } catch (Exception e) {
+            LOGGER.error("method forwardPaySpecial", e);
+        }
+        return "";
+    }
+
+    /**
      * 页面支付接口
      * @param settleOrderDto
      * @return
@@ -162,17 +190,72 @@ public class SettleOrderController {
     @ResponseBody
     public BaseOutput<SettleResultDto> pay(SettleOrderDto settleOrderDto) {
         try {
-            validPayParameters(settleOrderDto);
+            if (settleOrderDto.getWay() == null) {
+                return BaseOutput.failure("结算方式为空");
+            }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());
-            return settleRpc.pay(settleOrderDto);
+            return payDispatchHandler.pay(settleOrderDto);
         } catch (BusinessException e) {
             return BaseOutput.failure(e.getErrorMsg());
         } catch (Exception e) {
             LOGGER.error("method pay", e);
             return BaseOutput.failure();
         }
+    }
+
+    /**
+     * 跳转到退款页面
+     * @param settleOrderDto
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping(value = "/forwardRefund.html")
+    public String forwardRefund(SettleOrderDto settleOrderDto, ModelMap modelMap) {
+        try {
+            if (StrUtil.isBlank(settleOrderDto.getIds())) {
+                return "refund/refund";
+            }
+            settleOrderDto.setIdList(Stream.of(settleOrderDto.getIds().split(",")).map(id -> Long.parseLong(id)).collect(Collectors.toList()));
+            BaseOutput<Long> amountBaseOutput = settleRpc.queryTotalAmount(settleOrderDto);
+            if (amountBaseOutput.isSuccess()) {
+                modelMap.addAttribute("totalAmount", MoneyUtils.centToYuan(amountBaseOutput.getData()));
+            }
+            UserTicket userTicket = getUserTicket();
+            SettleConfig settleConfig = new SettleConfig();
+            settleConfig.setMarketId(userTicket.getFirmId());
+            settleConfig.setGroupCode(GroupCodeEnum.SETTLE_WAY_REFUND.getCode());
+            settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
+            BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
+            if (configBaseOutput.isSuccess()) {
+                modelMap.addAttribute("wayList", configBaseOutput.getData());
+            }
+            BaseOutput<SettleOrder> settleOrderBaseOutput = settleRpc.getById(settleOrderDto.getIdList().get(0));
+            if (settleOrderBaseOutput.isSuccess()){
+                modelMap.addAttribute("settleOrder", settleOrderBaseOutput.getData());
+            }
+            modelMap.addAttribute("ids", settleOrderDto.getIds());
+            return "refund/refund";
+        } catch (Exception e) {
+            LOGGER.error("method forwardRefund", e);
+        }
+        return "refund/refund";
+    }
+
+    /**
+     * 跳转到退款个性化页面
+     * @param settleOrderDto
+     * @return
+     */
+    @RequestMapping(value = "/forwardRefundSpecial.html")
+    public String forwardRefundSpecial(SettleOrderDto settleOrderDto, ModelMap modelMap) {
+        try {
+            return refundDispatchHandler.forwardSpecial(settleOrderDto, modelMap);
+        } catch (Exception e) {
+            LOGGER.error("method forwardRefundSpecial", e);
+        }
+        return "";
     }
 
     /**
@@ -184,15 +267,54 @@ public class SettleOrderController {
     @ResponseBody
     public BaseOutput<SettleResultDto> refund(SettleOrderDto settleOrderDto) {
         try {
-            validRefundParameters(settleOrderDto);
+            if (settleOrderDto.getWay() == null) {
+                return BaseOutput.failure("结算方式为空");
+            }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());
-            return settleRpc.refund(settleOrderDto);
+            return refundDispatchHandler.refund(settleOrderDto);
         } catch (BusinessException e) {
             return BaseOutput.failure(e.getErrorMsg());
         } catch (Exception e) {
             LOGGER.error("method refund", e);
+            return BaseOutput.failure();
+        }
+    }
+
+    /**
+     * 加载业务打印数据
+     * @param businessType
+     * @param businessCode
+     * @param reprint
+     * @return
+     */
+    @RequestMapping(value = "/loadPrintData.action")
+    public BaseOutput<PrintDto> loadPrintData(Integer businessType, String businessCode, Integer reprint) {
+        try {
+            if (businessType == null) {
+                return BaseOutput.failure("业务类型为空");
+            }
+            if (StrUtil.isBlank(businessCode)) {
+                return BaseOutput.failure("业务单号为空");
+            }
+            UrlConfig query = new UrlConfig();
+            query.setBusinessType(businessType);
+            query.setType(UrlTypeEnum.PRINT_DATA.getCode());
+            BaseOutput<String> baseOutput = settleRpc.getUrl(query);
+            if (!baseOutput.isSuccess()) {
+                return BaseOutput.failure(baseOutput.getMessage());
+            }
+            StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
+            builder.append("?businessType=").append(businessType)
+                    .append("&businessCode=").append(businessCode)
+                    .append("&reprint=").append(reprint);
+            return businessRpc.loadPrintData(builder.toString());
+        } catch (BusinessException e) {
+            LOGGER.error("method loadPrintData", e.getErrorMsg());
+            return BaseOutput.failure(e.getErrorMsg());
+        } catch (Exception e) {
+            LOGGER.error("method loadPrintData", e);
             return BaseOutput.failure();
         }
     }
@@ -204,64 +326,6 @@ public class SettleOrderController {
     @RequestMapping(value = "/forwardList.html")
     public String forwardList() {
         return "settleOrder/list";
-    }
-
-    /**
-     * 验证支付参数
-     * @param settleOrderDto
-     */
-    private void validPayParameters(SettleOrderDto settleOrderDto) {
-        if (CollUtil.isEmpty(settleOrderDto.getIdList())) {
-            throw new BusinessException("", "ID列表为空");
-        }
-        if (settleOrderDto.getWay() == null) {
-            throw new BusinessException("", "结算方式为空");
-        }
-        SettleWayEnum settleWayEnum = SettleWayEnum.getByCode(settleOrderDto.getWay());
-        switch (settleWayEnum) {
-            case CASH : break;
-            case POS:
-            case BANK:
-            case ALI_PAY:
-            case WECHAT_PAY:
-                if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
-                    throw new BusinessException("", "流水号为空");
-                }
-                break;
-            default: throw new BusinessException("", "不支持该方式");
-        }
-    }
-
-    /**
-     * 验证退款参数
-     * @param settleOrderDto
-     */
-    private void validRefundParameters(SettleOrderDto settleOrderDto) {
-        if (CollUtil.isEmpty(settleOrderDto.getIdList())) {
-            throw new BusinessException("", "ID列表为空");
-        }
-        if (settleOrderDto.getWay() == null) {
-            throw new BusinessException("", "结算方式为空");
-        }
-        SettleWayEnum settleWayEnum = SettleWayEnum.getByCode(settleOrderDto.getWay());
-        switch (settleWayEnum) {
-            case CASH : break;
-            case BANK:
-                if (StrUtil.isBlank(settleOrderDto.getAccountNumber())) {
-                    throw new BusinessException("", "银行卡号为空");
-                }
-                if (StrUtil.isBlank(settleOrderDto.getBankName())) {
-                    throw new BusinessException("", "银行名称为空");
-                }
-                if (StrUtil.isBlank(settleOrderDto.getBankCardHolder())) {
-                    throw new BusinessException("", "银行卡主为空");
-                }
-                if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
-                    throw new BusinessException("", "流水号为空");
-                }
-                break;
-            default: throw new BusinessException("", "不支持该方式");
-        }
     }
 
     /**

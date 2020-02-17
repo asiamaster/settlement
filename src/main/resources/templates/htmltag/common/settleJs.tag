@@ -129,6 +129,8 @@
 
     /** 清除按钮点击事件处理器 */
     function clearClickHandler() {
+        $('#customer-info').addClass("d-none");
+        $('#settle-order-list').addClass("d-none");
         $('#keyword').val("");
     }
 
@@ -165,30 +167,19 @@
         }
     }
 
-    /** 业务编号格式器 */
-    function businessCodeFormatter(value, row, index) {
-        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.businessType+','+row.businessCode+');return false;">'+value+'</a>'
-    }
-
-    /** 查看业务详情处理器 */
-    function showBusinessDetailHandler(businessType, businessCode) {
-        let url = "/urlConfig/showBusinessDetail.html?businessType="+businessType+"&businessCode="+businessCode;
-        bs4pop.dialog({content:url, title:'业务详情',isIframe:true,width:700,height:500,btns:[{label: '取消',className: 'btn-secondary'}]});
-    }
-
-    /** 错误消息提示框 */
-    function showError(message) {
-        bs4pop.alert(message, {type : "error"});
-    }
-
-    /** 提示消息弹出框 */
-    function showInfo(message) {
-        bs4pop.alert(message, {type : "info"});
-    }
-
-    /** 警示消息框 */
-    function showWarning(message) {
-        bs4pop.alert(message, {type : "warning"})
+    /** 结算结果处理器 */
+    function settleResultHandler(result) {
+        refreshTableHandler();
+        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 是否打印票据?';
+        bs4pop.confirm(message, {}, function(sure) {
+            if (sure) {
+                bui.loading.show("票据打印中,请稍后。。。");
+                for (let settleOrder of result.successItemList) {
+                    printHandler(settleOrder, 1);
+                }
+                bui.loading.hide();
+            }
+        });
     }
 </script>
 <script id="template-customer-info" type="text/html">

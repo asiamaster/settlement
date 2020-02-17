@@ -1,7 +1,7 @@
 <#bs4Body>
 <div class="container-fluid">
     <form id="form-pay" action="">
-        <id ></id>
+        <input type="hidden" name="ids" value="${ids!}"/>
         <div class="row">
             <div class="col-2 text-right">
                 结算金额:
@@ -19,22 +19,18 @@
                     if (wayLP.first) {
             %>
             <div class="col-2 text-left">
-                <input type="radio" name="wayRadio" value="${way.code}" checked/>${way.val}
+                <input type="radio" name="way" value="${way.code}" checked/>${way.val}
             </div>
             <% } else {%>
             <div class="col-2 text-left">
-                <input type="radio" name="wayRadio" value="${way.code}"/>${way.val}
+                <input type="radio" name="way" value="${way.code}"/>${way.val}
             </div>
             <% }}} %>
         </div>
-        <div class="row mt-2">
-            <div class="col-2 text-right">
-                流水号:
-            </div>
-            <div class="col-6 text-left">
-                <input type="text" class="form-control" name="serialNumber" id="serialNumber"/>
-            </div>
+        <div class="row mt-2" id="div-special">
+
         </div>
     </form>
 </div>
 </#bs4Body>
+<#pay_payJs/>
