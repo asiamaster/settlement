@@ -333,12 +333,7 @@ public class SettleOrderController {
      * @return
      */
     private UserTicket getUserTicket() {
-        UserTicket userTicket = DTOUtils.newInstance(UserTicket.class);
-        userTicket.setId(1L);
-        userTicket.setRealName("管理员");
-        userTicket.setFirmId(11L);
-        return userTicket;
-        /*UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
-        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);*/
+        UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
+        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);
     }
 }

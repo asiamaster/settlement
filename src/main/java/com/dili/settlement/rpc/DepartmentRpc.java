@@ -22,7 +22,7 @@ import java.util.List;
 public class DepartmentRpc {
     private static final Logger LOGGER = LoggerFactory.getLogger(DepartmentRpc.class);
 
-    @Value("${uap.domain:uap.diligrp.com}")
+    @Value("${uap.contextPath:http://uap.diligrp.com}")
     private String domain;
 
     /**
