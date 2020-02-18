@@ -4,7 +4,7 @@
         <div class="row">
             <nav class="col-12" aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item active" aria-current="page">缴费单</li>
+                    <li class="breadcrumb-item active" aria-current="page">退款单</li>
                 </ol>
             </nav>
         </div>
@@ -67,7 +67,7 @@
         </div>
     </div>
     <div class="d-none" id="settle-order-list">
-        <table id="table-settle-order-list" data-toggle="table" data-title="缴费单列表" data-click-to-select="true"  data-checkbox-header="true" data-unique-id="id" data-icons="bui.variable.icons" data-buttons-class="primary">
+        <table id="table-settle-order-list" data-toggle="table" data-title="退款单单列表" data-click-to-select="true" data-single-select="true" data-checkbox-header="true" data-unique-id="id" data-icons="bui.variable.icons" data-buttons-class="primary">
             <thead>
                 <tr>
                     <th data-width-unit="%" data-width="2" data-align="center" data-checkbox="true"></th>
@@ -93,7 +93,7 @@
             </thead>
         </table>
         <div class="py-3 text-center">
-            <button type="button" class="btn btn-primary" id="btn-certain-pay">确定</button>
+            <button type="button" class="btn btn-primary" id="btn-certain-refund">确定</button>
         </div>
     </div>
 
@@ -101,4 +101,4 @@
 </#bs4Body>
 <#common_commonJs/>
 <#common_settleJs/>
-<#pay_indexJs/>
+<#refund_indexJs/>

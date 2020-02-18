@@ -1,55 +1,36 @@
+<#bs4Body>
 <div class="container-fluid">
-    <form action="">
-        <div class="row py-3 row-cols-6">
-            <div class="col">结算金额：</div>
-            <div class="col">100.00</div>
-        </div>
-        <div class="row py-3 row-cols-6">
-            <div class="col">
-                结算方式：
+    <form id="form-pay" action="">
+        <input type="hidden" name="ids" value="${ids!}"/>
+        <div class="row">
+            <div class="col-2 text-right">
+                结算金额:
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payWay" id="" value="option1"
-                       checked>
-                <label class="form-check-label" for="">
-                    现金
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
-                <label class="form-check-label" for="">
-                    POS
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
-                <label class="form-check-label" for="">
-                    银行卡转账
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
-                <label class="form-check-label" for="">
-                    支付宝
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="payWay" id="" value="option2">
-                <label class="form-check-label" for="">
-                    微信
-                </label>
+            <div class="col-6 text-left">
+                <input type="text" class="form-control" value="${totalAmount!}" readonly/>
             </div>
         </div>
-        <div class="row row-cols-3">
-            <div class="form-group col">
-                <label for="code" class="">流水号</label>
-                <input type="text" class="form-control" name="code" id="code"/>
+        <div class="row mt-2">
+            <div class="col-2 text-right">
+                结算方式:
             </div>
+            <% if(isNotEmpty(wayList) && wayList.~size > 0) {
+                for(way in wayList) {
+                    if (wayLP.first) {
+            %>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}" checked/>${way.val}
+            </div>
+            <% } else {%>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}"/>${way.val}
+            </div>
+            <% }}} %>
         </div>
-        <div class="">
-            <button type="button" class="btn btn-primary">确定</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <div class="row mt-2" id="div-special">
+
         </div>
     </form>
 </div>
-
+</#bs4Body>
+<#pay_payJs/>

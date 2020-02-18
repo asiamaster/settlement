@@ -21,64 +21,13 @@
         <targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
         <targetXMLPackage>mapper</targetXMLPackage>
 
-        <springloaded.version>1.2.8.RELEASE</springloaded.version>
-        <sharp-sword.version>3.6.3-SNAPSHOT</sharp-sword.version>
     </properties>
-    <!--地利-->
-    <distributionManagement>
-        <repository>
-            <id>central</id>
-            <name>Artifactory Release Repository</name>
-            <url>
-                http://mvn2.diligrp.com/artifactory/libs-release-local
-            </url>
-        </repository>
-        <snapshotRepository>
-            <id>central</id>
-            <name>Artifactory Snapshot Repository</name>
-            <url>
-                http://mvn2.diligrp.com/artifactory/libs-snapshot-local
-            </url>
-        </snapshotRepository>
-    </distributionManagement>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Import dependency management from Spring Boot -->
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.2.2.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>Hoxton.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <build.profile.id>dev</build.profile.id>
-            </properties>
-        </profile>
-        <profile>
-            <id>test</id>
-            <properties>
-                <build.profile.id>test</build.profile.id>
-            </properties>
-        </profile>
-    </profiles>
+    <!-- 父工程定义 -->
+    <parent>
+        <artifactId>dili-parent</artifactId>
+        <groupId>com.dili</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
     <build>
         <!-- 资源文件过滤 -->
@@ -175,12 +124,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework/springloaded -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>springloaded</artifactId>
-            <version>${springloaded.version}</version>
-        </dependency>
         <!-- 内部包  -->
         <dependency>
             <groupId>com.dili</groupId>
@@ -190,12 +133,12 @@
         <dependency>
             <groupId>com.dili</groupId>
             <artifactId>uap-sdk</artifactId>
-            <version>2.6.0-SNAPSHOT</version>
+            <version>2.6.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.dili</groupId>
             <artifactId>settlement-sdk</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>

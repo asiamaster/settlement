@@ -1,42 +1,48 @@
+<#bs4Body>
 <div class="container-fluid">
-    <form action="">
-        <div class="row py-3 row-cols-1">
-            <div class="col">结算金额：</div>
-            <div class="col">100.00</div>
-        </div>
-        <div class="row row-cols-1">
-            <div class="form-group col">
-                <label for="" class="">客户姓名</label>
-                <input type="text" class="form-control" name="" id=""/>
+    <form id="form-refund" action="">
+        <input type="hidden" id="ids" name="ids" value="${ids!}"/>
+        <div class="row">
+            <div class="col-2 text-right">
+                退款金额:
             </div>
-            <div class="form-group col">
-                <label for="" class="">退款金额</label>
-                <input type="text" class="form-control red" name="" id=""/>
+            <div class="col-6 text-left">
+                <input type="text" class="form-control" value="${totalAmount!}" readonly/>
             </div>
         </div>
-        <hr>
-        <div class="row row-cols-1">
-            <div class="form-group col">
-                <label for="" class="">退款方式</label>
-                <input type="text" class="form-control" name="" disabled />
+        <div class="row mt-2">
+            <div class="col-2 text-right">
+                结算方式:
             </div>
-            <div class="form-group col">
-                <label for="" class="">银行卡号</label>
-                <input type="text" class="form-control" name="" disabled />
+            <% if(isNotEmpty(wayList) && wayList.~size > 0) {
+                  if(settleOrder.editEnable == 1) {
+                      for (way in wayList) {
+                          if (wayLP.first) {
+            %>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}" checked/>${way.val}
             </div>
-            <div class="form-group col">
-                <label for="" class="">银行名称</label>
-                <input type="text" class="form-control" name="" disabled />
+            <% } else {%>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}"/>${way.val}
             </div>
-            <div class="form-group col">
-                <label for="" class="">流水号</label>
-                <input type="text" class="form-control" name=""/>
+            <% }}} else {
+               for (way in wayList) {
+                  if (way.code == settleOrder.way) {
+            %>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}" checked/>${way.val}
             </div>
+            <% } else {%>
+            <div class="col-2 text-left">
+                <input type="radio" name="way" value="${way.code}" disabled/>${way.val}
+            </div>
+            <% }}}}%>
         </div>
-        <div class="">
-            <button type="button" class="btn btn-primary">确定</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+        <div class="" id="div-special">
+
         </div>
     </form>
 </div>
-
+</#bs4Body>
+<#refund_refundJs/>

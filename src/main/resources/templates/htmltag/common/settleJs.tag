@@ -11,6 +11,20 @@
                 enterClickHandler();
             }
         });
+        //选择客户列表 确定按钮事件
+        $('#btn-choose-customer').click(function () {
+            let arr = $('input[name="customerRadio"]:checked');
+            if (arr.length === 0) {
+                showInfo("请先选择客户");
+                return;
+            }
+            let row = $(arr[0]).closest('tr');
+            chooseCustomerCompleteHandler(row);
+        });
+        $('#dialog-customer-list').on("dblclick", 'table tr', function() {
+            let row = $(this).closest('tr');
+            chooseCustomerCompleteHandler(row);
+        });
     });
 
     /** 查询单选框change事件处理器 */
@@ -90,9 +104,20 @@
             certainCustomerHandler(arr[0]);
             return;
         }
-        //$('#table-customer-list > tbody').html(template('template-customer-list', {customers : arr}));
+        $('#dialog-customer-list .modal-body').html(template('template-customer-list', {customers : arr}));
         $('#dialog-customer-list').modal('show');
-        //bs4pop.dialog({content:$('#customer-list').html(), title:'选择客户'});
+    }
+
+    /** 选择客户完成处理器 */
+    function chooseCustomerCompleteHandler(row) {
+        let cus = {};
+        cus.id = row.attr("bind-id");
+        cus.name = row.attr("bind-name");
+        cus.cellphone = row.attr("bind-cellphone");
+        cus.certificateNumber = row.attr("bind-certificate");
+        cus.certificateAddr = row.attr("bind-addr");
+        $('#dialog-customer-list').modal('hide');
+        certainCustomerHandler(cus);
     }
 
     /** 确定唯一客户处理器 */
@@ -102,25 +127,31 @@
         loadCustomerOrdersHandler(cus.id);
     }
 
-    /** 加载客户单据处理器 */
-    function loadCustomerOrdersHandler(cusId) {
-        //TODO 待完成
-    }
-
-    /** 选择客户完成处理器 */
-    function chooseCustomerCompleteHandler() {
-        //TODO 待完成
-    }
-
     /** 清除按钮点击事件处理器 */
     function clearClickHandler() {
+        $('#customer-info').addClass("d-none");
+        $('#settle-order-list').addClass("d-none");
         $('#keyword').val("");
     }
 
     /** 刷卡按钮点击事件处理器 */
     function swipeCardClickHandler() {
-        //TODO 待完成
-        console.log("11111111");
+        $("#keyword").val("");
+        if(typeof(callbackObj) === "undefined"){
+            return;
+        }
+        setTimeout(function(){
+            var card = callbackObj.readIDCard();
+            if(card === undefined || $.trim(card) === ""){
+                return;
+            }
+            var info = eval('(' + card + ')');
+            if(typeof(info)=="undefined"){
+                showInfo("请检查读取身份证的设备是否已连接");
+            }else{
+                $("#keyword").val(info.IDCardNo);
+            }
+        },50);
     }
 
     /** 关键字文本框回车事件处理器 */
@@ -136,14 +167,19 @@
         }
     }
 
-    /** 错误消息提示框 */
-    function showError(message) {
-        bs4pop.alert(message, {type : "error"});
-    }
-
-    /** 提示消息弹出框 */
-    function showInfo(message) {
-        bs4pop.alert(message, {});
+    /** 结算结果处理器 */
+    function settleResultHandler(result) {
+        refreshTableHandler();
+        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 是否打印票据?';
+        bs4pop.confirm(message, {}, function(sure) {
+            if (sure) {
+                bui.loading.show("票据打印中,请稍后。。。");
+                for (let settleOrder of result.successItemList) {
+                    printHandler(settleOrder, 1);
+                }
+                bui.loading.hide();
+            }
+        });
     }
 </script>
 <script id="template-customer-info" type="text/html">
@@ -153,12 +189,24 @@
     <div class="col-2">{{certificateAddr}}</div>
 </script>
 <script id="template-customer-list" type="text/html">
-    {{each customers cus index}}
-    <tr>
-        <td></td>
-        <td>{{cus.name}}</td>
-        <td>{{cus.certificateNumber}}</td>
-        <td>{{cus.certificateAddr}}</td>
-    </tr>
-    {{/each}}
+    <table id="table-customer-list" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th class="text-center"></th>
+                <th class="text-center">客户名称</th>
+                <th class="text-center">证件号</th>
+                <th class="text-center">地址信息</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{each customers cus index}}
+                <tr bind-id="{{cus.id}}" bind-name="{{cus.name}}" bind-cellphone="{{cus.cellphone}}" bind-certificate="{{cus.certificateNumber}}" bind-addr="{{cus.certificateAddr}}">
+                    <td class="text-center"><input type="radio" name="customerRadio" value="{{cus.id}}"/></td>
+                    <td class="text-center">{{cus.name}}</td>
+                    <td class="text-center">{{cus.certificateNumber}}</td>
+                    <td class="text-center">{{cus.certificateAddr}}</td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
 </script>
