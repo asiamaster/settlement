@@ -183,10 +183,13 @@
     }
 </script>
 <script id="template-customer-info" type="text/html">
-    <div class="col-1">{{name}}</div>
-    <div class="col-1">{{cellphone}}</div>
-    <div class="col-2">{{certificateNumber}}</div>
-    <div class="col-2">{{certificateAddr}}</div>
+    <hr>
+    <div class="row">
+        <div class="col-1">{{name}}</div>
+        <div class="col-1">{{cellphone}}</div>
+        <div class="col-2">{{certificateNumber}}</div>
+        <div class="col-2">{{certificateAddr}}</div>
+    </div>
 </script>
 <script id="template-customer-list" type="text/html">
     <table id="table-customer-list" class="table table-bordered table-hover">

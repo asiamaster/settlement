@@ -60,14 +60,4 @@
         $('#settle-order-list').removeClass("d-none");
         $('#table-settle-order-list').bootstrapTable("refreshOptions", {url:"/settleOrder/listPayOrders.action?customerId="+cusId});
     }
-
-    //时间范围
-    lay('.laydatetime').each(function() {
-        laydate.render({
-            elem : this
-            ,trigger : 'click'
-            ,range: true
-        });
-    });
-    // bs4pop.alert('当前共缴费 '+ 5 +' 笔业务，'+ 2 + '笔成功，票据正在打印中...',undefined, function(){  })
 </script>
