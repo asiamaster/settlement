@@ -12,6 +12,7 @@ import com.dili.settlement.dto.SettleResultDto;
 import com.dili.settlement.enums.*;
 import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
+import com.dili.settlement.util.DateUtil;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
 import com.dili.ss.domain.PageOutput;
@@ -29,6 +30,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -338,10 +342,15 @@ public class SettleOrderController {
                 modelMap.addAttribute("businessTypeList", configBaseOutput.getData());
             }
             modelMap.put("marketId", userTicket.getFirmId());
+            LocalDate date = DateUtil.nowDate();
+            String operateTimeStart = DateUtil.formatDate(date.minus(2L, ChronoUnit.DAYS), "yyyy-MM-dd") + " 00:00:00";
+            String operateTimeEnd = DateUtil.formatDate(date, "yyyy-MM-dd") + " 23:59:59";
+            modelMap.addAttribute("operateTimeStart", operateTimeStart);
+            modelMap.addAttribute("operateTimeEnd", operateTimeEnd);
         } catch (Exception e) {
             LOGGER.error("method forwardList", e);
         }
-        return "settleOrder/list";
+        return "settleOrder/index";
     }
 
     /**

@@ -16,17 +16,17 @@
     }
 
     /** 票据打印处理器 */
-    function printHandler(settleOrder, reprint) {
-        /*if(typeof(callbackObj) === "undefined"){
+    function printHandler(businessType, businessCode, reprint) {
+        if(typeof(callbackObj) === "undefined"){
             return;
-        }*/
+        }
         $.ajax({
             type:"POST",
             url:"/settleOrder/loadPrintData.action",
             dataType:"json",
             data:{
-                "businessType":settleOrder.businessType,
-                "businessCode":settleOrder.businessCode,
+                "businessType":businessType,
+                "businessCode":businessCode,
                 "reprint":reprint
             },
             success:function(result) {

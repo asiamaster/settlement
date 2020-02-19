@@ -70,13 +70,13 @@
                 <label class="justify-content-end">结算日期</label>
                 <div class="form-inline">
                     <div class="input-group">
-                        <input type="text" name="operateTimeStart" id="operateTimeStart" class="form-control laydatetime"/>
+                        <input type="text" name="operateTimeStart" id="operateTimeStart" value="${operateTimeStart!}" class="form-control laydatetime"/>
                         <div class="input-group-append">
                             <label for="operateTimeStart"  class="input-group-text fa fa-calendar"></label>
                         </div>
                     </div>&nbsp;&nbsp;至&nbsp;&nbsp;
                     <div class="input-group">
-                        <input type="text" name="operateTimeEnd" id="operateTimeEnd" class="form-control laydatetime" value=""/>
+                        <input type="text" name="operateTimeEnd" id="operateTimeEnd" value="${operateTimeEnd!}" class="form-control laydatetime"/>
                         <div class="input-group-append">
                             <label for="operateTimeEnd"  class="input-group-text fa fa-calendar"></label>
                         </div>
@@ -97,10 +97,10 @@
         <div class="col-12">
             <div id="toolbar" class="btn-group" role="group" aria-label="Toolbar with button groups">
                 <#resource code="settlement-reprint">
-                <button id="btn_cancel" type="button" class="btn btn-primary" onclick=""><i class="fa fa-print"></i>
+                <button id="btn-reprint" type="button" class="btn btn-primary" onclick=""><i class="fa fa-print"></i>
                     单据补打
                 </button>
-                <#/resource>
+                </#resource>
             </div>
             <table id="grid" data-toggle="table" data-title="结算单" class="table" data-toolbar="#toolbar"
                    data-pagination="true" data-page-number="1" data-page-size="10"
@@ -111,9 +111,16 @@
                    data-show-refresh="true" data-show-fullscreen="true" data-show-columns="true">
                 <thead>
                 <tr>
+                    <th data-align="center" data-checkbox="true"></th>
+                    <% if (hasResource("settlement-list-business-detail")) { %>
+                    <th data-field="businessCode" data-align="center" data-formatter="businessCodeFormatter">
+                        业务单号
+                    </th>
+                    <% } else { %>
                     <th data-field="businessCode" data-align="center">
                         业务单号
                     </th>
+                    <% } %>
                     <th data-field="businessName" data-align="center">
                         业务类型
                     </th>

@@ -71,9 +71,15 @@
             <thead>
                 <tr>
                     <th data-width-unit="%" data-width="2" data-align="center" data-checkbox="true"></th>
+                    <% if (hasResource("settlement-pay-business-detail")) { %>
                     <th data-width-unit="%" data-width="10" data-field="businessCode" data-align="center" data-formatter="businessCodeFormatter">
                         业务编号
                     </th>
+                    <% } else { %>
+                    <th data-width-unit="%" data-width="10" data-field="businessCode" data-align="center">
+                        业务编号
+                    </th>
+                    <% } %>
                     <th data-width-unit="%" data-width="10" data-field="businessName" data-align="center">
                         业务类型
                     </th>

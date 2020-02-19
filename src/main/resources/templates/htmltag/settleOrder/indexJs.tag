@@ -20,6 +20,8 @@
             });
         });
 
+        $('#btn-reprint').click(reprintClickHandler);
+
         $(window).resize(function () {
             $('#grid').bootstrapTable('resetView')
         });
@@ -46,5 +48,23 @@
             order: params.order
         }
         return $.extend(temp, bui.util.bindGridMeta2Form('grid', 'queryForm'));
+    }
+
+    /** 补打按钮点击事件处理器 */
+    function reprintClickHandler() {
+        let rows = $('#grid').bootstrapTable('getSelections');
+        if (null == rows || rows.length === 0) {
+            showWarning('请至少选中一条数据');
+            return;
+        }
+        let row = rows[0];
+        let message = '是否确认补打 '+row.businessCode+' 票据?';
+        bs4pop.confirm(message, {}, function(sure) {
+            if (sure) {
+                bui.loading.show("票据打印中,请稍后。。。");
+                printHandler(row.businessType, row.businessCode, 2);
+                bui.loading.hide();
+            }
+        });
     }
 </script>

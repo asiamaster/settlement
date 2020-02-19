@@ -9,6 +9,7 @@ import com.dili.ss.metadata.ValueProvider;
 import com.dili.uap.sdk.domain.Department;
 import com.dili.uap.sdk.domain.UserTicket;
 import com.dili.uap.sdk.session.SessionContext;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 /**
  * 部门provider
  */
+@Component
 public class DepartmentProvider implements ValueProvider {
 
     @Resource

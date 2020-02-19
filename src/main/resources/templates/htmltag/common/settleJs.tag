@@ -170,12 +170,12 @@
     /** 结算结果处理器 */
     function settleResultHandler(result) {
         refreshTableHandler();
-        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 是否打印票据?';
+        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 是否确认打印票据?';
         bs4pop.confirm(message, {}, function(sure) {
             if (sure) {
                 bui.loading.show("票据打印中,请稍后。。。");
                 for (let settleOrder of result.successItemList) {
-                    printHandler(settleOrder, 1);
+                    printHandler(settleOrder.businessType, settleOrder.businessCode, 1);
                 }
                 bui.loading.hide();
             }

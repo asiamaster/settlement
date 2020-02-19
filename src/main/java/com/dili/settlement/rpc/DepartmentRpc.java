@@ -38,7 +38,7 @@ public class DepartmentRpc {
         if (StrUtil.isBlank(responseBody)) {
             return new ArrayList<>(0);
         }
-        BaseOutput<List<Department>> baseOutput = JSON.parseObject(responseBody, new TypeReference<List<Department>>(){}.getType());
+        BaseOutput<List<Department>> baseOutput = JSON.parseObject(responseBody, new TypeReference<BaseOutput<List<Department>>>(){}.getType());
         if (!baseOutput.isSuccess()) {
             LOGGER.error("method list result: " + baseOutput.getMessage());
             return new ArrayList<>(0);
