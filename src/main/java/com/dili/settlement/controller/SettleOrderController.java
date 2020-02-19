@@ -18,7 +18,6 @@ import com.dili.ss.domain.EasyuiPageOutput;
 import com.dili.ss.domain.PageOutput;
 import com.dili.ss.dto.DTOUtils;
 import com.dili.ss.exception.BusinessException;
-import com.dili.ss.metadata.ValueProviderUtils;
 import com.dili.ss.util.MoneyUtils;
 import com.dili.uap.sdk.domain.UserTicket;
 import com.dili.uap.sdk.session.SessionContext;
@@ -32,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -380,12 +378,7 @@ public class SettleOrderController {
      * @return
      */
     private UserTicket getUserTicket() {
-        UserTicket userTicket = DTOUtils.newInstance(UserTicket.class);
-        userTicket.setFirmId(12L);
-        userTicket.setId(1L);
-        userTicket.setRealName("管理员");
-        return userTicket;
-        /*UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
-        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);*/
+        UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
+        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);
     }
 }
