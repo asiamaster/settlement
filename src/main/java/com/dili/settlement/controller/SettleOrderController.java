@@ -14,8 +14,10 @@ import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
+import com.dili.ss.domain.PageOutput;
 import com.dili.ss.dto.DTOUtils;
 import com.dili.ss.exception.BusinessException;
+import com.dili.ss.metadata.ValueProviderUtils;
 import com.dili.ss.util.MoneyUtils;
 import com.dili.uap.sdk.domain.UserTicket;
 import com.dili.uap.sdk.session.SessionContext;
@@ -324,8 +326,44 @@ public class SettleOrderController {
      * @return
      */
     @RequestMapping(value = "/forwardList.html")
-    public String forwardList() {
+    public String forwardList(ModelMap modelMap) {
+        try {
+            UserTicket userTicket = getUserTicket();
+            SettleConfig settleConfig = new SettleConfig();
+            settleConfig.setMarketId(userTicket.getFirmId());
+            settleConfig.setGroupCode(GroupCodeEnum.SETTLE_BUSINESS_TYPE.getCode());
+            //settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
+            BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
+            if (configBaseOutput.isSuccess()) {
+                modelMap.addAttribute("businessTypeList", configBaseOutput.getData());
+            }
+            modelMap.put("marketId", userTicket.getFirmId());
+        } catch (Exception e) {
+            LOGGER.error("method forwardList", e);
+        }
         return "settleOrder/list";
+    }
+
+    /**
+     * 分页查询列表数据
+     * @return
+     */
+    @RequestMapping(value = "/listPage.action")
+    @ResponseBody
+    public String listPage(SettleOrderDto settleOrderDto) {
+        try {
+            UserTicket userTicket = getUserTicket();
+            settleOrderDto.setMarketId(userTicket.getFirmId());
+            settleOrderDto.setConvert(true);
+            PageOutput<List<SettleOrder>> pageOutput = settleRpc.listPage(settleOrderDto);
+            if (pageOutput.isSuccess()) {
+                //List itemList = ValueProviderUtils.buildDataByProvider(settleOrderDto, pageOutput.getData());
+                return new EasyuiPageOutput(pageOutput.getTotal(), pageOutput.getData()).toString();
+            }
+        } catch (Exception e) {
+            LOGGER.error("method listPage", e);
+        }
+        return new EasyuiPageOutput(0, new ArrayList(0)).toString();
     }
 
     /**
@@ -333,7 +371,12 @@ public class SettleOrderController {
      * @return
      */
     private UserTicket getUserTicket() {
-        UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
-        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);
+        UserTicket userTicket = DTOUtils.newInstance(UserTicket.class);
+        userTicket.setFirmId(12L);
+        userTicket.setId(1L);
+        userTicket.setRealName("管理员");
+        return userTicket;
+        /*UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
+        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);*/
     }
 }
