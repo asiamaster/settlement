@@ -3,6 +3,7 @@ package com.dili.settlement.controller;
 import cn.hutool.core.util.StrUtil;
 import com.dili.settlement.component.PayDispatchHandler;
 import com.dili.settlement.component.RefundDispatchHandler;
+import com.dili.settlement.component.TokenHandler;
 import com.dili.settlement.domain.SettleConfig;
 import com.dili.settlement.domain.SettleOrder;
 import com.dili.settlement.domain.UrlConfig;
@@ -57,6 +58,9 @@ public class SettleOrderController {
 
     @Resource
     private BusinessRpc businessRpc;
+
+    @Resource
+    private TokenHandler tokenHandler;
 
     /**
      * 跳转到支付页面
@@ -162,6 +166,7 @@ public class SettleOrderController {
             if (configBaseOutput.isSuccess()) {
                 modelMap.addAttribute("wayList", configBaseOutput.getData());
             }
+            modelMap.addAttribute("token", tokenHandler.generate(createTokenStr(userTicket, settleOrderDto)));
             modelMap.addAttribute("ids", settleOrderDto.getIds());
             return "pay/pay";
         } catch (Exception e) {
@@ -200,6 +205,9 @@ public class SettleOrderController {
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());
+            if (!tokenHandler.valid(createTokenStr(userTicket, settleOrderDto), settleOrderDto.getToken())) {
+                return BaseOutput.failure("非法请求");
+            }
             return payDispatchHandler.pay(settleOrderDto);
         } catch (BusinessException e) {
             return BaseOutput.failure(e.getErrorMsg());
@@ -239,6 +247,7 @@ public class SettleOrderController {
             if (settleOrderBaseOutput.isSuccess()){
                 modelMap.addAttribute("settleOrder", settleOrderBaseOutput.getData());
             }
+            modelMap.addAttribute("token", tokenHandler.generate(createTokenStr(userTicket, settleOrderDto)));
             modelMap.addAttribute("ids", settleOrderDto.getIds());
             return "refund/refund";
         } catch (Exception e) {
@@ -277,6 +286,9 @@ public class SettleOrderController {
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());
+            if (!tokenHandler.valid(createTokenStr(userTicket, settleOrderDto), settleOrderDto.getToken())) {
+                return BaseOutput.failure("非法请求");
+            }
             return refundDispatchHandler.refund(settleOrderDto);
         } catch (BusinessException e) {
             return BaseOutput.failure(e.getErrorMsg());
@@ -380,5 +392,19 @@ public class SettleOrderController {
     private UserTicket getUserTicket() {
         UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
         return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);
+    }
+
+    /**
+     * 生成用于签名的字符串
+     * @param userTicket
+     * @param settleOrderDto
+     * @return
+     */
+    private String createTokenStr(UserTicket userTicket, SettleOrderDto settleOrderDto) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(settleOrderDto.getIds());
+        builder.append(userTicket.getId());
+        builder.append(userTicket.getFirmId());
+        return builder.toString();
     }
 }
