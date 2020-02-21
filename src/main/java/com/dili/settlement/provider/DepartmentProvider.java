@@ -1,6 +1,6 @@
 package com.dili.settlement.provider;
 
-import com.dili.settlement.rpc.DepartmentRpc;
+import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.dto.DTOUtils;
 import com.dili.ss.metadata.FieldMeta;
 import com.dili.ss.metadata.ValuePair;
@@ -8,6 +8,8 @@ import com.dili.ss.metadata.ValuePairImpl;
 import com.dili.ss.metadata.ValueProvider;
 import com.dili.uap.sdk.domain.Department;
 import com.dili.uap.sdk.domain.UserTicket;
+import com.dili.uap.sdk.domain.dto.DepartmentDto;
+import com.dili.uap.sdk.rpc.DepartmentRpc;
 import com.dili.uap.sdk.session.SessionContext;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +33,13 @@ public class DepartmentProvider implements ValueProvider {
         if (userTicket == null) {
             return new ArrayList<>(0);
         }
-        Department query = DTOUtils.newInstance(Department.class);
+        DepartmentDto query = DTOUtils.newInstance(DepartmentDto.class);
         query.setFirmCode(userTicket.getFirmCode());
-        List<Department> itemList = departmentRpc.list(query);
+        BaseOutput<List<Department>> baseOutput = departmentRpc.listByExample(query);
+        if (!baseOutput.isSuccess()) {
+            return new ArrayList<>(0);
+        }
+        List<Department> itemList = baseOutput.getData();
         return itemList.stream().map(temp -> new ValuePairImpl<>(temp.getName(), temp.getId())).collect(Collectors.toList());
     }
 
