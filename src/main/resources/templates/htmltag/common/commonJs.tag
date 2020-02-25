@@ -6,17 +6,17 @@
 
     /** 业务编号格式器 */
     function businessCodeFormatter(value, row, index) {
-        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.businessType+','+row.businessCode+');return false;">'+value+'</a>'
+        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.appId+','+row.businessType+','+row.businessCode+');return false;">'+value+'</a>'
     }
 
     /** 查看业务详情处理器 */
-    function showBusinessDetailHandler(businessType, businessCode) {
-        let url = "/urlConfig/showBusinessDetail.html?businessType="+businessType+"&businessCode="+businessCode;
+    function showBusinessDetailHandler(appId, businessType, businessCode) {
+        let url = "/settleOrder/showDetail.html?appId="+appId+"&businessType="+businessType+"&businessCode="+businessCode;
         bs4pop.dialog({content:url, title:'业务详情',isIframe:true,width:700,height:500,btns:[{label: '取消',className: 'btn-secondary'}]});
     }
 
     /** 票据打印处理器 */
-    function printHandler(businessType, businessCode, reprint) {
+    function printHandler(appId, businessType, businessCode, reprint) {
         if(typeof(callbackObj) === "undefined"){
             return;
         }
@@ -25,6 +25,7 @@
             url:"/settleOrder/loadPrintData.action",
             dataType:"json",
             data:{
+                "appId":appId,
                 "businessType":businessType,
                 "businessCode":businessCode,
                 "reprint":reprint

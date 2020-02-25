@@ -1,12 +1,14 @@
 package com.dili.settlement.controller;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.dili.settlement.component.PayDispatchHandler;
 import com.dili.settlement.component.RefundDispatchHandler;
 import com.dili.settlement.component.TokenHandler;
+import com.dili.settlement.domain.MarketApplication;
 import com.dili.settlement.domain.SettleConfig;
 import com.dili.settlement.domain.SettleOrder;
-import com.dili.settlement.domain.UrlConfig;
+import com.dili.settlement.dto.ApplicationConfigDto;
 import com.dili.settlement.dto.PrintDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -159,8 +162,7 @@ public class SettleOrderController {
             }
             UserTicket userTicket = getUserTicket();
             SettleConfig settleConfig = new SettleConfig();
-            settleConfig.setMarketId(userTicket.getFirmId());
-            settleConfig.setGroupCode(GroupCodeEnum.SETTLE_WAY_PAY.getCode());
+            settleConfig.setGroupCode(SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
             settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
             BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
             if (configBaseOutput.isSuccess()) {
@@ -236,8 +238,7 @@ public class SettleOrderController {
             }
             UserTicket userTicket = getUserTicket();
             SettleConfig settleConfig = new SettleConfig();
-            settleConfig.setMarketId(userTicket.getFirmId());
-            settleConfig.setGroupCode(GroupCodeEnum.SETTLE_WAY_REFUND.getCode());
+            settleConfig.setGroupCode(SettleGroupCodeEnum.SETTLE_WAY_REFUND.getCode());
             settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
             BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
             if (configBaseOutput.isSuccess()) {
@@ -299,32 +300,68 @@ public class SettleOrderController {
     }
 
     /**
+     * 跳转到业务详情页面
+     * @param response
+     */
+    @RequestMapping(value = "/showDetail.html")
+    public void showDetail(ApplicationConfigDto query, HttpServletResponse response) {
+        try {
+            validBusinessParams(query);
+            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_DETAIL.getCode());
+            query.setCode(query.getBusinessType());
+            BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
+            if (!baseOutput.isSuccess()) {
+                return;
+            }
+            StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
+            builder.append("?businessType=").append(query.getBusinessType()).append("&businessCode=").append(query.getBusinessCode());
+            response.setStatus(302);
+            response.setHeader("Location", builder.toString());
+        } catch (BusinessException e) {
+            LOGGER.error("method showBusinessDetail", e);
+        } catch (Exception e) {
+            LOGGER.error("method showBusinessDetail", e);
+        }
+    }
+
+    /**
+     * 验证业务详情、打印数据参数
+     * @param applicationConfigDto
+     */
+    private void validBusinessParams(ApplicationConfigDto applicationConfigDto) {
+        if (applicationConfigDto.getAppId() == null) {
+            throw new BusinessException("", "应用ID为空");
+        }
+        if (applicationConfigDto.getBusinessType() == null) {
+            throw new BusinessException("", "业务类型为空");
+        }
+        if (StrUtil.isBlank(applicationConfigDto.getBusinessCode())) {
+            throw new BusinessException("", "业务单号为空");
+        }
+    }
+
+    /**
      * 加载业务打印数据
-     * @param businessType
-     * @param businessCode
-     * @param reprint
+     * @param query
      * @return
      */
     @RequestMapping(value = "/loadPrintData.action")
-    public BaseOutput<PrintDto> loadPrintData(Integer businessType, String businessCode, Integer reprint) {
+    public BaseOutput<PrintDto> loadPrintData(ApplicationConfigDto query) {
         try {
-            if (businessType == null) {
-                return BaseOutput.failure("业务类型为空");
+            validBusinessParams(query);
+            if (query.getReprint() == null) {
+                return BaseOutput.failure("打印标记为空");
             }
-            if (StrUtil.isBlank(businessCode)) {
-                return BaseOutput.failure("业务单号为空");
-            }
-            UrlConfig query = new UrlConfig();
-            query.setBusinessType(businessType);
-            query.setType(UrlTypeEnum.PRINT_DATA.getCode());
-            BaseOutput<String> baseOutput = settleRpc.getUrl(query);
+            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_DETAIL.getCode());
+            query.setCode(query.getBusinessType());
+            BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
             if (!baseOutput.isSuccess()) {
                 return BaseOutput.failure(baseOutput.getMessage());
             }
             StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
-            builder.append("?businessType=").append(businessType)
-                    .append("&businessCode=").append(businessCode)
-                    .append("&reprint=").append(reprint);
+            builder.append("?businessType=").append(query.getBusinessType())
+                    .append("&businessCode=").append(query.getBusinessCode())
+                    .append("&reprint=").append(query.getReprint());
             return businessRpc.loadPrintData(builder.toString());
         } catch (BusinessException e) {
             LOGGER.error("method loadPrintData", e.getErrorMsg());
@@ -343,13 +380,12 @@ public class SettleOrderController {
     public String forwardList(ModelMap modelMap) {
         try {
             UserTicket userTicket = getUserTicket();
-            SettleConfig settleConfig = new SettleConfig();
-            settleConfig.setMarketId(userTicket.getFirmId());
-            settleConfig.setGroupCode(GroupCodeEnum.SETTLE_BUSINESS_TYPE.getCode());
-            //settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
-            BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
-            if (configBaseOutput.isSuccess()) {
-                modelMap.addAttribute("businessTypeList", configBaseOutput.getData());
+            MarketApplication marketApplication = new MarketApplication();
+            marketApplication.setMarketId(userTicket.getFirmId());
+            //marketApplication.setState(ConfigStateEnum.ENABLE.getCode());
+            BaseOutput<List<MarketApplication>> appBaseOutput = settleRpc.listMarketApplication(marketApplication);
+            if (appBaseOutput.isSuccess()) {
+                modelMap.addAttribute("appList", appBaseOutput.getData());
             }
             modelMap.put("marketId", userTicket.getFirmId());
             LocalDate date = DateUtil.nowDate();
@@ -371,6 +407,9 @@ public class SettleOrderController {
     @ResponseBody
     public String listPage(SettleOrderDto settleOrderDto) {
         try {
+            if (CollUtil.isEmpty(settleOrderDto.getBusinessTypeList())) {
+                return new EasyuiPageOutput(0, new ArrayList(0)).toString();
+            }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setMarketId(userTicket.getFirmId());
             settleOrderDto.setConvert(true);

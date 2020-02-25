@@ -1,8 +1,10 @@
 package com.dili.settlement.rpc;
 
+import com.dili.settlement.domain.ApplicationConfig;
+import com.dili.settlement.domain.MarketApplication;
 import com.dili.settlement.domain.SettleConfig;
 import com.dili.settlement.domain.SettleOrder;
-import com.dili.settlement.domain.UrlConfig;
+import com.dili.settlement.dto.ApplicationConfigDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
 import com.dili.ss.domain.BaseOutput;
@@ -70,12 +72,20 @@ public interface SettleRpc {
     BaseOutput<Long> queryTotalAmount(SettleOrderDto settleOrderDto);
 
     /**
-     *根据业务类型 和 路径类型 获取访问路径
-     * @param urlConfig
+     * 查询应用配置列表 appId 组编码
+     * @param applicationConfig
      * @return
      */
-    @RequestMapping(value = "/api/urlConfig/getUrl", method = RequestMethod.POST)
-    BaseOutput<String> getUrl(UrlConfig urlConfig);
+    @RequestMapping(value = "/api/applicationConfig/list", method = RequestMethod.POST)
+    BaseOutput<List<ApplicationConfig>> listAppConfig(ApplicationConfigDto applicationConfig);
+
+    /**
+     * 查询应用配置值 应用ID 组编码   编码
+     * @param applicationConfig
+     * @return
+     */
+    @RequestMapping(value = "/api/applicationConfig/getVal", method = RequestMethod.POST)
+    BaseOutput<String> getAppConfigVal(ApplicationConfigDto applicationConfig);
 
     /**
      * 查询结算配置列表
@@ -84,4 +94,20 @@ public interface SettleRpc {
      */
     @RequestMapping(value = "/api/settleConfig/list", method = RequestMethod.POST)
     BaseOutput<List<SettleConfig>> listSettleConfig(SettleConfig settleConfig);
+
+    /**
+     * 查询结算配置值 应用ID 组编码   编码
+     * @param settleConfig
+     * @return
+     */
+    @RequestMapping(value = "/api/settleConfig/getVal", method = RequestMethod.POST)
+    BaseOutput<String> getSettleConfigVal(SettleConfig settleConfig);
+
+    /**
+     * 查询接入系统列表
+     * @param marketApplication
+     * @return
+     */
+    @RequestMapping(value = "/api/marketApplication/list")
+    BaseOutput<List<MarketApplication>> listMarketApplication(MarketApplication marketApplication);
 }

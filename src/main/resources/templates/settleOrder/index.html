@@ -8,6 +8,29 @@
         </nav>
     </div>
     <form id="queryForm" role="form" novalidate>
+        <div class="row d-none">
+            <div class="form-group col-auto">
+                接入应用
+            </div>
+            <div class="form-group col-auto">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input chk-app-all" type="checkbox" checked>
+                    <label class="form-check-label">全选</label>
+                </div>
+            </div>
+            <div class="row">
+                <% if (isNotEmpty(appList) && appList.~size > 0) {
+                for (app in appList) {
+                %>
+                <div class="form-group col-auto">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input chk-app-item" type="checkbox" value="${app.appId}" checked>
+                        <label class="form-check-label">${app.name!}</label>
+                    </div>
+                </div>
+                <% } }%>
+            </div>
+        </div>
         <div class="row">
             <div class="form-group col-auto">
                 业务类型
@@ -18,7 +41,8 @@
                     <label class="form-check-label">全选</label>
                 </div>
             </div>
-            <% if (isNotEmpty(businessTypeList) && businessTypeList.~size > 0) {
+            <div class="row" id="div-business-type"></div>
+            <!--<% if (isNotEmpty(businessTypeList) && businessTypeList.~size > 0) {
                 for (type in businessTypeList) {
             %>
             <div class="form-group col-auto">
@@ -27,7 +51,7 @@
                     <label class="form-check-label">${type.val!}</label>
                 </div>
             </div>
-            <% } }%>
+            <% } }%>-->
         </div>
         <div class="row  row-cols-6">
             <div class="form-group col">

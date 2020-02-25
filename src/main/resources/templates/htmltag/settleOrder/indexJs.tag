@@ -1,11 +1,26 @@
 <script>
     $(function() {
-        $('.chk-type-all').change(function() {
+        //初始化业务类型选择框
+        queryBusinessTypeHandler();
+        $('.chk-app-all').change(function() {
+            $('.chk-app-item').prop("checked", this.checked);
+            queryBusinessTypeHandler();
+        });
+
+        $('.chk-app-item').change(function() {
+            if ($('.chk-app-item:checked').length === $('.chk-app-item').length){
+                $('.chk-app-all').prop("checked", true);
+            } else {
+                $('.chk-app-all').prop("checked", false);
+            }
+            queryBusinessTypeHandler();
+        });
+        $('.chk-type-all').on("change", function() {
             $('.chk-type-item').prop("checked", this.checked);
         });
 
-        $('.chk-type-item').change(function() {
-             if ($('.chk-type-item:checked').length === $('.chk-type-item').length){
+        $('.chk-type-item').on("change", function() {
+            if ($('.chk-type-item:checked').length === $('.chk-type-item').length){
                 $('.chk-type-all').prop("checked", true);
             } else {
                 $('.chk-type-all').prop("checked", false);
@@ -50,6 +65,38 @@
         return $.extend(temp, bui.util.bindGridMeta2Form('grid', 'queryForm'));
     }
 
+    /** 查询业务类型 */
+    function queryBusinessTypeHandler() {
+        let arr = $('.chk-app-item:checked');
+        if (arr.length === 0) {
+            $('#div-business-type').empty();
+            return;
+        }
+        let appIds = [];
+        for (let temp of arr) {
+            appIds.push($(temp).val());
+        }
+        $.ajax({
+            url:"/applicationConfig/listBusinessType.action",
+            type:"POST",
+            dataType:"json",
+            async:false,
+            data:{
+                "appIds":appIds.join(",")
+            },
+            success:function(result) {
+                if (result.code === '200') {
+                    $('#div-business-type').html(template("template-business-type", {businessTypeList:result.data}));
+                } else {
+                    showError(result.message);
+                }
+            },
+            error:function() {
+                showError("系统异常,请稍后重试");
+            }
+        });
+    }
+
     /** 补打按钮点击事件处理器 */
     function reprintClickHandler() {
         let rows = $('#grid').bootstrapTable('getSelections');
@@ -62,9 +109,20 @@
         bs4pop.confirm(message, {}, function(sure) {
             if (sure) {
                 bui.loading.show("票据打印中,请稍后。。。");
-                printHandler(row.businessType, row.businessCode, 2);
+                printHandler(row.appId, row.businessType, row.businessCode, 2);
                 bui.loading.hide();
             }
         });
     }
+</script>
+
+<script id="template-business-type" type="text/html">
+    {{each businessTypeList type index}}
+        <div class="form-group col-auto">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input chk-type-item" type="checkbox" name="businessTypeList[{{index}}]" value="{{type.code}}" checked>
+                <label class="form-check-label">{{type.val}}</label>
+            </div>
+        </div>
+    {{/each}}
 </script>
