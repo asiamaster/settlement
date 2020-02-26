@@ -29,6 +29,7 @@
 
     /** 查询单选框change事件处理器 */
     function queryTypeChangeHandler() {
+        clearClickHandler();
         let queryType = $('input[name="queryType"]:checked').val();
         switch (queryType) {
             case "1":
