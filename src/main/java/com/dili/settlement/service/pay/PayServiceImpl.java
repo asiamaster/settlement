@@ -41,9 +41,10 @@ public abstract class PayServiceImpl implements PayService {
      */
     @Override
     public void validParametersSpecial(SettleOrderDto settleOrderDto) {
-        if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
+        //根据PRD暂时屏蔽流水号验证
+        /*if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
             throw new BusinessException("", "流水号为空");
-        }
+        }*/
     }
 
     /**

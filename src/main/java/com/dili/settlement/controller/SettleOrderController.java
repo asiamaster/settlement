@@ -201,9 +201,6 @@ public class SettleOrderController {
     @ResponseBody
     public BaseOutput<SettleResultDto> pay(SettleOrderDto settleOrderDto) {
         try {
-            if (settleOrderDto.getWay() == null) {
-                return BaseOutput.failure("结算方式为空");
-            }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());
@@ -281,9 +278,6 @@ public class SettleOrderController {
     @ResponseBody
     public BaseOutput<SettleResultDto> refund(SettleOrderDto settleOrderDto) {
         try {
-            if (settleOrderDto.getWay() == null) {
-                return BaseOutput.failure("结算方式为空");
-            }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setOperatorId(userTicket.getId());
             settleOrderDto.setOperatorName(userTicket.getRealName());

@@ -52,6 +52,9 @@ public class PayDispatchHandler {
      * @return
      */
     public BaseOutput<SettleResultDto> pay(SettleOrderDto settleOrderDto) {
+        if (settleOrderDto.getWay() == null) {
+            throw new BusinessException("", "结算方式为空");
+        }
         PayService service = serviceMap.get(settleOrderDto.getWay());
         if (service == null) {
             throw new BusinessException("", "不支持该结算方式");

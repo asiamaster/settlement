@@ -11,7 +11,6 @@ import com.dili.ss.exception.BusinessException;
 import org.springframework.ui.ModelMap;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,9 +54,10 @@ public abstract class RefundServiceImpl implements RefundService {
         if (StrUtil.isBlank(settleOrderDto.getBankCardHolder())) {
             throw new BusinessException("", "银行卡主为空");
         }
-        if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
+        //根据PRD暂时屏蔽流水号验证
+        /*if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
             throw new BusinessException("", "流水号为空");
-        }
+        }*/
     }
 
     @Override
