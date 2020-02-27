@@ -18,7 +18,7 @@ public class CashRefundServiceImpl extends RefundServiceImpl implements RefundSe
     }
 
     @Override
-    public void validParametersSpecial(SettleOrderDto settleOrderDto) {
+    public void validParamsSpecial(SettleOrderDto settleOrderDto) {
         return;
     }
 

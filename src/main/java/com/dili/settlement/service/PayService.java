@@ -20,13 +20,13 @@ public interface PayService {
      * 通用验证参数
      * @param settleOrderDto
      */
-    void validParameters(SettleOrderDto settleOrderDto);
+    void validParams(SettleOrderDto settleOrderDto);
 
     /**
      * 个性化验证参数
      * @param settleOrderDto
      */
-    void validParametersSpecial(SettleOrderDto settleOrderDto);
+    void validParamsSpecial(SettleOrderDto settleOrderDto);
 
     /**
      * 支付

@@ -18,7 +18,7 @@ public class CashPayServiceImpl extends PayServiceImpl implements PayService {
     }
 
     @Override
-    public void validParametersSpecial(SettleOrderDto settleOrderDto) {
+    public void validParamsSpecial(SettleOrderDto settleOrderDto) {
         return;
     }
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class BankRefundServiceImpl extends RefundServiceImpl implements RefundService {
 
     @Override
-    public void validParametersSpecial(SettleOrderDto settleOrderDto) {
+    public void validParamsSpecial(SettleOrderDto settleOrderDto) {
         if (StrUtil.isBlank(settleOrderDto.getBankCardHolder())) {
             throw new BusinessException("", "银行卡主为空");
         }

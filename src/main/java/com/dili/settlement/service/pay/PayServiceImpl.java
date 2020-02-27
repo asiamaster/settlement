@@ -25,11 +25,11 @@ public abstract class PayServiceImpl implements PayService {
      * @param settleOrderDto
      */
     @Override
-    public void validParameters(SettleOrderDto settleOrderDto) {
+    public void validParams(SettleOrderDto settleOrderDto) {
         if (StrUtil.isBlank(settleOrderDto.getIds())) {
             throw new BusinessException("", "ID列表为空");
         }
-        validParametersSpecial(settleOrderDto);
+        validParamsSpecial(settleOrderDto);
     }
 
     /**
@@ -37,7 +37,7 @@ public abstract class PayServiceImpl implements PayService {
      * @param settleOrderDto
      */
     @Override
-    public void validParametersSpecial(SettleOrderDto settleOrderDto) {
+    public void validParamsSpecial(SettleOrderDto settleOrderDto) {
         //根据PRD暂时屏蔽流水号验证
         /*if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
             throw new BusinessException("", "流水号为空");
@@ -51,7 +51,7 @@ public abstract class PayServiceImpl implements PayService {
      */
     @Override
     public BaseOutput<SettleResultDto> pay(SettleOrderDto settleOrderDto) {
-        validParameters(settleOrderDto);
+        validParams(settleOrderDto);
         settleOrderDto.setIdList(Stream.of(settleOrderDto.getIds().split(",")).map(id -> Long.parseLong(id)).collect(Collectors.toList()));
         return settleRpc.pay(settleOrderDto);
     }

@@ -33,21 +33,21 @@ public abstract class RefundServiceImpl implements RefundService {
     }
 
     @Override
-    public void validParameters(SettleOrderDto settleOrderDto) {
+    public void validParams(SettleOrderDto settleOrderDto) {
         if (StrUtil.isBlank(settleOrderDto.getIds())) {
             throw new BusinessException("", "ID列表为空");
         }
-        validParametersSpecial(settleOrderDto);
+        validParamsSpecial(settleOrderDto);
     }
 
     @Override
-    public void validParametersSpecial(SettleOrderDto settleOrderDto) {
+    public void validParamsSpecial(SettleOrderDto settleOrderDto) {
         return;
     }
 
     @Override
     public BaseOutput<SettleResultDto> refund(SettleOrderDto settleOrderDto) {
-        validParameters(settleOrderDto);
+        validParams(settleOrderDto);
         settleOrderDto.setIdList(Stream.of(settleOrderDto.getIds().split(",")).map(id -> Long.parseLong(id)).collect(Collectors.toList()));
         return settleRpc.refund(settleOrderDto);
     }
