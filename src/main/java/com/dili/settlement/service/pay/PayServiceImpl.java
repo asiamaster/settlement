@@ -29,9 +29,6 @@ public abstract class PayServiceImpl implements PayService {
         if (StrUtil.isBlank(settleOrderDto.getIds())) {
             throw new BusinessException("", "ID列表为空");
         }
-        if (settleOrderDto.getWay() == null) {
-            throw new BusinessException("", "结算方式为空");
-        }
         validParametersSpecial(settleOrderDto);
     }
 

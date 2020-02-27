@@ -37,27 +37,12 @@ public abstract class RefundServiceImpl implements RefundService {
         if (StrUtil.isBlank(settleOrderDto.getIds())) {
             throw new BusinessException("", "ID列表为空");
         }
-        if (settleOrderDto.getWay() == null) {
-            throw new BusinessException("", "结算方式为空");
-        }
         validParametersSpecial(settleOrderDto);
     }
 
     @Override
     public void validParametersSpecial(SettleOrderDto settleOrderDto) {
-        if (StrUtil.isBlank(settleOrderDto.getAccountNumber())) {
-            throw new BusinessException("", "银行卡号为空");
-        }
-        if (StrUtil.isBlank(settleOrderDto.getBankName())) {
-            throw new BusinessException("", "银行名称为空");
-        }
-        if (StrUtil.isBlank(settleOrderDto.getBankCardHolder())) {
-            throw new BusinessException("", "银行卡主为空");
-        }
-        //根据PRD暂时屏蔽流水号验证
-        /*if (StrUtil.isBlank(settleOrderDto.getSerialNumber())) {
-            throw new BusinessException("", "流水号为空");
-        }*/
+        return;
     }
 
     @Override

@@ -29,7 +29,8 @@
 
     /** 查询单选框change事件处理器 */
     function queryTypeChangeHandler() {
-        clearClickHandler();
+        $('#customer-info').addClass("d-none");
+        $('#settle-order-list').addClass("d-none");
         let queryType = $('input[name="queryType"]:checked').val();
         switch (queryType) {
             case "1":
@@ -55,6 +56,8 @@
 
     /** 根据客户姓名查询处理器 */
     function queryByNameHandler() {
+        $('#customer-info').addClass("d-none");
+        $('#settle-order-list').addClass("d-none");
         let keyword = $('#keyword').val();
         if (keyword === undefined || $.trim(keyword) === '') {
             return;
@@ -66,6 +69,8 @@
 
     /** 根据证件号查询处理器 */
     function queryByCertificateHandler() {
+        $('#customer-info').addClass("d-none");
+        $('#settle-order-list').addClass("d-none");
         let keyword = $('#keyword').val();
         if (keyword === undefined || $.trim(keyword) === '') {
             return;
