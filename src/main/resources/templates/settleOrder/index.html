@@ -24,7 +24,7 @@
                 %>
                 <div class="form-group col-auto">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input chk-app-item" type="checkbox" value="${app.appId}" name="appIdList[${appLP.index}]" checked>
+                        <input class="form-check-input chk-app-item" type="checkbox" value="${app.appId}" name="appIdList[${appLP.dataIndex}]" checked>
                         <label class="form-check-label">${app.name!}</label>
                     </div>
                 </div>
@@ -186,7 +186,6 @@
             </table>
         </div>
     </div>
-</div>
 </div>
 </#bs4Body>
 <#common_commonJs/>
