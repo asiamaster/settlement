@@ -110,4 +110,10 @@ public interface SettleRpc {
      */
     @RequestMapping(value = "/api/marketApplication/list")
     BaseOutput<List<MarketApplication>> listMarketApplication(MarketApplication marketApplication);
+
+    /**
+     * 执行结算回调
+     */
+    @RequestMapping(value = "/api/retryRecord/executeCallback")
+    void executeCallback();
 }
