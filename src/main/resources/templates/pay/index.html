@@ -1,6 +1,6 @@
 <#bs4Body>
 <div class="container-fluid">
-    <form class="form">
+    <form class="form" οnkeydοwn="if(event.keyCode==13){return false;}">
         <input type="text" style="display: none"/>
         <div class="row">
             <nav class="col-12" aria-label="breadcrumb">
@@ -39,8 +39,8 @@
             </div>
         </div>
         <div class="">
-            <button type="button" class="btn btn-primary" id="btn-query">查询</button>
-            <button type="button" class="btn btn-secondary" id="btn-clear">清空</button>
+            <button type="button" class="btn btn-outline-primary mr-2" id="btn-clear"><i class="fa fa-refresh"></i> 清空</button>
+            <button type="button" class="btn btn-outline-primary" id="btn-query"><i class="fa fa-search"></i> 查询</button>
         </div>
     </form>
     <div class="d-none" id="customer-info">
