@@ -10,18 +10,18 @@
             </nav>
         </div>
         <div class="row">
-            <div class="col-1">
+            <div class="col-2">
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="queryType" value="1" checked>
-                    <label class="form-check-label" for="">
+                    <input class="form-check-input" type="radio" name="queryType" id="queryType1" value="1" checked>
+                    <label class="form-check-label" for="queryType1">
                         客户姓名
                     </label>
                 </div>
             </div>
-            <div class="col-1">
+            <div class="col-2">
                 <div class="form-check ">
-                    <input class="form-check-input" type="radio" name="queryType" value="2">
-                    <label class="form-check-label" for="">
+                    <input class="form-check-input" type="radio" name="queryType" id="queryType2" value="2">
+                    <label class="form-check-label" for="queryType2">
                         证件号
                     </label>
                 </div>
@@ -34,7 +34,7 @@
                     <input type="text" class="form-control" id="keyword" maxlength="30" placeholder="">
                 </div>
             </div>
-            <div class="col-1 d-none">
+            <div class="col-2 d-none">
                 <button type="button" class="btn btn-primary" id="btn-swipe-card">刷卡获取</button>
             </div>
         </div>
@@ -59,8 +59,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btn-choose-customer">确定</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary px-5" id="btn-choose-customer">确定</button>
+                    <button type="button" class="btn btn-secondary px-5" data-dismiss="modal">取消</button>
                 </div>
             </div>
         </div>
@@ -100,7 +100,7 @@
         </table>
         <% if(hasResource("settlement-pay")) { %>
         <div class="py-3 text-center">
-            <button type="button" class="btn btn-primary" id="btn-certain-pay">确定</button>
+            <button type="button" class="btn btn-primary px-5" id="btn-certain-pay">确定</button>
         </div>
         <% } %>
     </div>
