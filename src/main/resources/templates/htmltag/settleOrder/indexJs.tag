@@ -88,7 +88,7 @@
                 if (result.code === '200') {
                     $('#div-business-type').html(template("template-business-type", {businessTypeList:result.data}));
                 } else {
-                    showError(result.message);
+                    //showError(result.message);
                 }
             },
             error:function() {
@@ -105,6 +105,10 @@
             return;
         }
         let row = rows[0];
+        if (!row.printEnable) {
+            showWarning("已处理记录才能补打票据");
+            return;
+        }
         let message = '是否确认补打 '+row.businessCode+' 票据?';
         bs4pop.confirm(message, {}, function(sure) {
             if (sure) {
