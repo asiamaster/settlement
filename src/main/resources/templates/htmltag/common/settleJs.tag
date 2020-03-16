@@ -201,19 +201,19 @@
     <table id="table-customer-list" class="table table-bordered table-hover">
         <thead>
             <tr>
-                <th class="text-center"></th>
-                <th class="text-center">客户名称</th>
-                <th class="text-center">证件号</th>
-                <th class="text-center">地址信息</th>
+                <th class="text-center align-middle"></th>
+                <th class="text-center align-middle">客户名称</th>
+                <th class="text-center align-middle">证件号</th>
+                <th class="text-center align-middle">地址信息</th>
             </tr>
         </thead>
         <tbody>
             {{each customers cus index}}
                 <tr bind-id="{{cus.id}}" bind-name="{{cus.name}}" bind-cellphone="{{cus.cellphone}}" bind-certificate="{{cus.certificateNumber}}" bind-addr="{{cus.certificateAddr}}">
-                    <td class="text-center"><input type="radio" name="customerRadio" value="{{cus.id}}"/></td>
-                    <td class="text-center">{{cus.name}}</td>
-                    <td class="text-center">{{cus.certificateNumber}}</td>
-                    <td class="text-center">{{cus.certificateAddr}}</td>
+                    <td class="text-center align-middle"><input type="radio" name="customerRadio" value="{{cus.id}}"/></td>
+                    <td class="text-center align-middle">{{cus.name}}</td>
+                    <td class="text-center align-middle">{{cus.certificateNumber}}</td>
+                    <td class="text-center align-middle">{{cus.certificateAddr}}</td>
                 </tr>
             {{/each}}
         </tbody>
