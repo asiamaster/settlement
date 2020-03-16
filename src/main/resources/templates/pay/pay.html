@@ -20,11 +20,11 @@
                 for(way in wayList) {
                     if (wayLP.first) {
             %>
-            <div class="col-2 text-left">
+            <div class="auto-col pl-3 text-left">
                 <input type="radio" name="way" value="${way.code}" checked/>${way.val}
             </div>
             <% } else {%>
-            <div class="col-2 text-left">
+            <div class="auto-col pl-3 text-left">
                 <input type="radio" name="way" value="${way.code}"/>${way.val}
             </div>
             <% }}} %>
