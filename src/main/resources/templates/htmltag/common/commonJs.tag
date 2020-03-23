@@ -6,7 +6,7 @@
 
     /** 业务编号格式器 */
     function businessCodeFormatter(value, row, index) {
-        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.appId+','+row.businessType+','+row.businessCode+');return false;">'+value+'</a>'
+        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.appId+','+row.businessType+',\''+row.businessCode+'\');return false;">'+value+'</a>'
     }
 
     /** 查看业务详情处理器 */
