@@ -20,6 +20,7 @@
         if(typeof(callbackObj) === "undefined"){
             return;
         }
+        window.printFinish = function() {}
         $.ajax({
             type:"POST",
             url:"/settleOrder/loadPrintData.action",
