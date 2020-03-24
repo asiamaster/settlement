@@ -40,14 +40,15 @@
         $(window).resize(function () {
             $('#grid').bootstrapTable('resetView')
         });
-        queryDataHandler();
+        //初始化表格
+        $('#grid').bootstrapTable('refreshOptions', {url: '/settleOrder/listPage.action'});
     });
 
     /**
      * 查询处理
      */
     function queryDataHandler() {
-        $('#grid').bootstrapTable('refreshOptions', {url: '/settleOrder/listPage.action'});
+        $('#grid').bootstrapTable('refresh');
     }
 
     /**
