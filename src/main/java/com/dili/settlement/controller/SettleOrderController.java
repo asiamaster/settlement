@@ -346,7 +346,7 @@ public class SettleOrderController {
             if (query.getReprint() == null) {
                 return BaseOutput.failure("打印标记为空");
             }
-            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_DETAIL.getCode());
+            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_PRINT.getCode());
             query.setCode(query.getBusinessType());
             BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
             if (!baseOutput.isSuccess()) {
