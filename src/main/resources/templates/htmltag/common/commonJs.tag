@@ -55,6 +55,6 @@
 
     /** 警示消息框 */
     function showWarning(message) {
-        bs4pop.alert(message, {type : "warning"})
+        bs4pop.alert(message, {type : "warning"});
     }
 </script>
