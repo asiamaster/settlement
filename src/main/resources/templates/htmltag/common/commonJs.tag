@@ -12,7 +12,7 @@
     /** 查看业务详情处理器 */
     function showBusinessDetailHandler(appId, businessType, businessCode) {
         let url = "/settleOrder/showDetail.html?appId="+appId+"&businessType="+businessType+"&businessCode="+businessCode;
-        bs4pop.dialog({content:url, title:'业务详情',isIframe:true,width:700,height:500,btns:[{label: '取消',className: 'btn-secondary'}]});
+        bs4pop.dialog({content:url, title:'业务详情',isIframe:true,width:'80%',height:'95%',btns:[{label: '取消',className: 'btn-secondary'}]});
     }
 
     /** 票据打印处理器 */
