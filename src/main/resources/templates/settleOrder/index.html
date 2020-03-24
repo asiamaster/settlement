@@ -1,13 +1,15 @@
 <#bs4Body>
 <div class="container-fluid">
     <div class="row">
-        <nav class="col-12" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item active" aria-current="page">结算单</li>
+        <nav class="col-12">
+            <ol class="breadcrumb"  data-toggle="collapse" data-target="#queryForm" aria-controls="queryForm">
+                <li class="breadcrumb-item active">
+                    结算单 &nbsp;&nbsp;<a class="position-absolute" href="javascript:;"><i class="fa fa-angle-double-down fa-lg" aria-hidden="true"></i></a>
+                </li>
             </ol>
         </nav>
     </div>
-    <form id="queryForm" role="form" novalidate>
+    <form id="queryForm" role="form" class="collapse show" >
         <div class="row d-none">
             <div class="form-group col-auto">
                 接入应用
