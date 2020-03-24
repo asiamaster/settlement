@@ -16,7 +16,7 @@
     }
 
     /** 票据打印处理器 */
-    function printHandler(appId, businessType, businessCode, reprint) {
+    function printHandler(settleType, appId, businessType, businessCode, reprint) {
         if(typeof(callbackObj) === "undefined"){
             return;
         }
@@ -26,6 +26,7 @@
             url:"/settleOrder/loadPrintData.action",
             dataType:"json",
             data:{
+                "settleType":settleType,
                 "appId":appId,
                 "businessType":businessType,
                 "businessCode":businessCode,

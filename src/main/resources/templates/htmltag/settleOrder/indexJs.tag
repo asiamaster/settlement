@@ -113,7 +113,7 @@
         bs4pop.confirm(message, {}, function(sure) {
             if (sure) {
                 bui.loading.show("票据打印中,请稍后。。。");
-                printHandler(row.appId, row.businessType, row.businessCode, 2);
+                printHandler(row.type, row.appId, row.businessType, row.businessCode, 2);
                 bui.loading.hide();
             }
         });

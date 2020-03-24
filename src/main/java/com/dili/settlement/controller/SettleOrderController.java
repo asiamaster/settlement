@@ -344,10 +344,17 @@ public class SettleOrderController {
     public BaseOutput<PrintDto> loadPrintData(ApplicationConfigDto query) {
         try {
             validBusinessParams(query);
+            if (query.getSettleType() == null) {
+                return BaseOutput.failure("结算类型为空");
+            }
             if (query.getReprint() == null) {
                 return BaseOutput.failure("打印标记为空");
             }
-            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_PRINT.getCode());
+            if (query.getSettleType().equals(SettleTypeEnum.PAY.getCode())) {
+                query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_PAY_PRINT.getCode());
+            } else {
+                query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_REFUND_PRINT.getCode());
+            }
             query.setCode(query.getBusinessType());
             BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
             if (!baseOutput.isSuccess()) {
