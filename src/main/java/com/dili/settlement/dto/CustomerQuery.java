@@ -31,4 +31,36 @@ public class CustomerQuery extends Customer {
      * 客户所属组织集
      */
     private List<Long> marketIdList;
+
+    public LocalDateTime getCreateTimeStart() {
+        return createTimeStart;
+    }
+
+    public void setCreateTimeStart(LocalDateTime createTimeStart) {
+        this.createTimeStart = createTimeStart;
+    }
+
+    public LocalDateTime getCreateTimeEnd() {
+        return createTimeEnd;
+    }
+
+    public void setCreateTimeEnd(LocalDateTime createTimeEnd) {
+        this.createTimeEnd = createTimeEnd;
+    }
+
+    public Long getMarketId() {
+        return marketId;
+    }
+
+    public void setMarketId(Long marketId) {
+        this.marketId = marketId;
+    }
+
+    public List<Long> getMarketIdList() {
+        return marketIdList;
+    }
+
+    public void setMarketIdList(List<Long> marketIdList) {
+        this.marketIdList = marketIdList;
+    }
 }

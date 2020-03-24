@@ -340,6 +340,7 @@ public class SettleOrderController {
      * @return
      */
     @RequestMapping(value = "/loadPrintData.action")
+    @ResponseBody
     public BaseOutput<PrintDto> loadPrintData(ApplicationConfigDto query) {
         try {
             validBusinessParams(query);
