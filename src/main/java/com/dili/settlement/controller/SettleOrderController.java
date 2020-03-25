@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.dili.settlement.component.PayDispatchHandler;
 import com.dili.settlement.component.RefundDispatchHandler;
+import com.dili.settlement.component.SettleTypeDispatchHandler;
 import com.dili.settlement.component.TokenHandler;
 import com.dili.settlement.domain.MarketApplication;
 import com.dili.settlement.domain.SettleConfig;
@@ -64,6 +65,9 @@ public class SettleOrderController {
 
     @Resource
     private TokenHandler tokenHandler;
+
+    @Resource
+    private SettleTypeDispatchHandler settleTypeDispatchHandler;
 
     /**
      * 跳转到支付页面
@@ -300,37 +304,13 @@ public class SettleOrderController {
     @RequestMapping(value = "/showDetail.html")
     public void showDetail(ApplicationConfigDto query, HttpServletResponse response) {
         try {
-            validBusinessParams(query);
-            query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_DETAIL.getCode());
-            query.setCode(query.getBusinessType());
-            BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
-            if (!baseOutput.isSuccess()) {
-                return;
-            }
-            StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
-            builder.append("?businessType=").append(query.getBusinessType()).append("&businessCode=").append(query.getBusinessCode());
+            String url = settleTypeDispatchHandler.getDetailUrl(query);
             response.setStatus(302);
-            response.setHeader("Location", builder.toString());
+            response.setHeader("Location", url);
         } catch (BusinessException e) {
             LOGGER.error("method showBusinessDetail", e);
         } catch (Exception e) {
             LOGGER.error("method showBusinessDetail", e);
-        }
-    }
-
-    /**
-     * 验证业务详情、打印数据参数
-     * @param applicationConfigDto
-     */
-    private void validBusinessParams(ApplicationConfigDto applicationConfigDto) {
-        if (applicationConfigDto.getAppId() == null) {
-            throw new BusinessException("", "应用ID为空");
-        }
-        if (applicationConfigDto.getBusinessType() == null) {
-            throw new BusinessException("", "业务类型为空");
-        }
-        if (StrUtil.isBlank(applicationConfigDto.getBusinessCode())) {
-            throw new BusinessException("", "业务单号为空");
         }
     }
 
@@ -343,28 +323,8 @@ public class SettleOrderController {
     @ResponseBody
     public BaseOutput<PrintDto> loadPrintData(ApplicationConfigDto query) {
         try {
-            validBusinessParams(query);
-            if (query.getSettleType() == null) {
-                return BaseOutput.failure("结算类型为空");
-            }
-            if (query.getReprint() == null) {
-                return BaseOutput.failure("打印标记为空");
-            }
-            if (query.getSettleType().equals(SettleTypeEnum.PAY.getCode())) {
-                query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_PAY_PRINT.getCode());
-            } else {
-                query.setGroupCode(AppGroupCodeEnum.APP_BUSINESS_URL_REFUND_PRINT.getCode());
-            }
-            query.setCode(query.getBusinessType());
-            BaseOutput<String> baseOutput = settleRpc.getAppConfigVal(query);
-            if (!baseOutput.isSuccess()) {
-                return BaseOutput.failure(baseOutput.getMessage());
-            }
-            StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
-            builder.append("?businessType=").append(query.getBusinessType())
-                    .append("&businessCode=").append(query.getBusinessCode())
-                    .append("&reprint=").append(query.getReprint());
-            return businessRpc.loadPrintData(builder.toString());
+            String url = settleTypeDispatchHandler.getPrintUrl(query);
+            return businessRpc.loadPrintData(url);
         } catch (BusinessException e) {
             LOGGER.error("method loadPrintData", e.getErrorMsg());
             return BaseOutput.failure(e.getErrorMsg());
