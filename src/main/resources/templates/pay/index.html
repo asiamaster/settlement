@@ -1,5 +1,6 @@
 <#bs4Body>
 <div class="container-fluid">
+    <#bs4nav>
     <form class="form" οnkeydοwn="if(event.keyCode==13){return false;}">
         <input type="text" style="display: none"/>
         <div class="row">
@@ -43,7 +44,9 @@
             <button type="button" class="btn btn-outline-primary" id="btn-query"><i class="fa fa-search"></i> 查询</button>
         </div>
     </form>
-    <div class="d-none" id="customer-info">
+</#bs4nav>
+
+<div class="d-none" id="customer-info">
     </div>
     <!-- 弹窗 -->
     <div class="modal" tabindex="-1" role="dialog" id="dialog-customer-list">

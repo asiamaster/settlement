@@ -1,6 +1,7 @@
 <#bs4Body>
 <div class="container-fluid">
-    <form class="form"  οnkeydοwn="if(event.keyCode==13){return false;}">
+    <#bs4nav>
+    <form class="form"   οnkeydοwn="if(event.keyCode==13){return false;}">
         <input type="text" style="display: none;"/>
         <div class="row">
             <nav class="col-12" aria-label="breadcrumb">
@@ -43,6 +44,7 @@
             <button type="button" class="btn btn-outline-primary" id="btn-query"><i class="fa fa-search"></i> 查询</button>
         </div>
     </form>
+</#bs4nav>
     <div class="d-none" id="customer-info">
     </div>
     <!-- 弹窗 -->
