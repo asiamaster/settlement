@@ -108,7 +108,7 @@ public interface SettleRpc {
      * @param marketApplication
      * @return
      */
-    @RequestMapping(value = "/api/marketApplication/list")
+    @RequestMapping(value = "/api/marketApplication/list", method = RequestMethod.POST)
     BaseOutput<List<MarketApplication>> listMarketApplication(MarketApplication marketApplication);
 
     /**
