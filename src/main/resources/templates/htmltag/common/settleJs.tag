@@ -191,10 +191,9 @@
 <script id="template-customer-info" type="text/html">
     <hr>
     <div class="row">
-        <div class="col-1">{{name}}</div>
-        <div class="col-1">{{cellphone}}</div>
+        <div class="col-2">{{name}}</div>
         <div class="col-2">{{certificateNumber}}</div>
-        <div class="col-2">{{certificateAddr}}</div>
+        <div class="col-1">{{contactsPhone}}</div>
     </div>
 </script>
 <script id="template-customer-list" type="text/html">
