@@ -17,7 +17,7 @@
                 结算方式:
             </div>
             <% if(isNotEmpty(wayList) && wayList.~size > 0) {
-                  if(settleOrder.editEnable == 1) {
+                  if(isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {
                       for (way in wayList) {
                           if (wayLP.first) {
             %>
@@ -30,7 +30,7 @@
             </div>
             <% }}} else {
                for (way in wayList) {
-                  if (way.code == settleOrder.way) {
+                  if (isNotEmpty(settleOrder) && way.code == settleOrder.way) {
             %>
             <div class="auto-col pl-3 text-left">
                 <input type="radio" name="way" value="${way.code}" checked/>${way.val}

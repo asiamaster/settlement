@@ -3,7 +3,7 @@
         卡主*:
     </div>
     <div class="col-6 text-left">
-        <% if (settleOrder.editEnable == 1) { %>
+        <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) { %>
         <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankCardHolder}" name="bankCardHolder" id="bankCardHolder" required/>
         <% } else {%>
         <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankCardHolder}" name="bankCardHolder" id="bankCardHolder" required readonly/>
@@ -15,7 +15,7 @@
         银行卡号*:
     </div>
     <div class="col-6 text-left">
-        <% if (settleOrder.editEnable == 1) { %>
+        <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) { %>
         <input type="text" class="form-control" maxlength="20" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required/>
         <% } else {%>
         <input type="text" class="form-control" maxlength="20" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required readonly/>
@@ -27,7 +27,7 @@
         银行名称*:
     </div>
     <div class="col-6 text-left">
-        <% if (settleOrder.editEnable == 1) {%>
+        <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {%>
         <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankName}" name="bankName" id="bankName" required/>
         <% } else {%>
         <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankName}" name="bankName" id="bankName" required readonly/>
