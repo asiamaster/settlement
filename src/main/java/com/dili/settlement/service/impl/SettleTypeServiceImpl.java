@@ -25,8 +25,8 @@ public abstract class SettleTypeServiceImpl implements SettleTypeService {
         if (query.getBusinessType() == null) {
             throw new BusinessException("", "业务类型为空");
         }
-        if (StrUtil.isBlank(query.getBusinessCode())) {
-            throw new BusinessException("", "业务单号为空");
+        if (StrUtil.isBlank(query.getOrderCode())) {
+            throw new BusinessException("", "订单号为空");
         }
     }
 
@@ -38,8 +38,8 @@ public abstract class SettleTypeServiceImpl implements SettleTypeService {
         if (query.getBusinessType() == null) {
             throw new BusinessException("", "业务类型为空");
         }
-        if (StrUtil.isBlank(query.getBusinessCode())) {
-            throw new BusinessException("", "业务单号为空");
+        if (StrUtil.isBlank(query.getOrderCode())) {
+            throw new BusinessException("", "订单号为空");
         }
         if (query.getReprint() == null) {
             throw new BusinessException("", "打印标记为空");
@@ -56,7 +56,8 @@ public abstract class SettleTypeServiceImpl implements SettleTypeService {
             throw new BusinessException("", baseOutput.getMessage());
         }
         StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
-        builder.append("?businessType=").append(query.getBusinessType()).append("&businessCode=").append(query.getBusinessCode());
+        builder.append("?businessType=").append(query.getBusinessType())
+                .append("&orderCode=").append(query.getOrderCode());
         return builder.toString();
     }
 
@@ -71,7 +72,7 @@ public abstract class SettleTypeServiceImpl implements SettleTypeService {
         }
         StringBuilder builder = new StringBuilder(StrUtil.isBlank(baseOutput.getData()) ? "" : baseOutput.getData());
         builder.append("?businessType=").append(query.getBusinessType())
-                .append("&businessCode=").append(query.getBusinessCode())
+                .append("&orderCode=").append(query.getOrderCode())
                 .append("&reprint=").append(query.getReprint());
         return builder.toString();
     }

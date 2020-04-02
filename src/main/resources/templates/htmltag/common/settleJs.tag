@@ -181,7 +181,7 @@
             if (sure) {
                 bui.loading.show("票据打印中,请稍后。。。");
                 for (let settleOrder of result.successItemList) {
-                    printHandler(settleOrder.type, settleOrder.appId, settleOrder.businessType, settleOrder.businessCode, 1);
+                    printHandler(settleOrder.type, settleOrder.appId, settleOrder.businessType, settleOrder.orderCode, 1);
                 }
                 bui.loading.hide();
             }

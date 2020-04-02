@@ -6,17 +6,17 @@
 
     /** 业务编号格式器 */
     function businessCodeFormatter(value, row, index) {
-        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.type+','+row.appId+','+row.businessType+',\''+row.businessCode+'\');return false;">'+value+'</a>'
+        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.type+','+row.appId+','+row.businessType+',\''+row.orderCode+'\');return false;">'+value+'</a>'
     }
 
     /** 查看业务详情处理器 */
-    function showBusinessDetailHandler(settleType, appId, businessType, businessCode) {
-        let url = "/settleOrder/showDetail.html?settleType="+settleType+"&appId="+appId+"&businessType="+businessType+"&businessCode="+businessCode;
+    function showBusinessDetailHandler(settleType, appId, businessType, orderCode) {
+        let url = "/settleOrder/showDetail.html?settleType="+settleType+"&appId="+appId+"&businessType="+businessType+"&orderCode="+orderCode;
         bs4pop.dialog({content:url, title:'业务详情',isIframe:true,width:'80%',height:'95%',btns:[{label: '取消',className: 'btn-secondary'}]});
     }
 
     /** 票据打印处理器 */
-    function printHandler(settleType, appId, businessType, businessCode, reprint) {
+    function printHandler(settleType, appId, businessType, orderCode, reprint) {
         if(typeof(callbackObj) === "undefined"){
             return;
         }
@@ -29,7 +29,7 @@
                 "settleType":settleType,
                 "appId":appId,
                 "businessType":businessType,
-                "businessCode":businessCode,
+                "orderCode":orderCode,
                 "reprint":reprint
             },
             success:function(result) {
