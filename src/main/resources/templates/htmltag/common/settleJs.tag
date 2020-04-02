@@ -122,6 +122,7 @@
         cus.cellphone = row.attr("bind-cellphone");
         cus.certificateNumber = row.attr("bind-certificate");
         cus.certificateAddr = row.attr("bind-addr");
+        cus.contactsPhone = row.attr("bind-contacts-phone");
         $('#dialog-customer-list').modal('hide');
         certainCustomerHandler(cus);
     }
@@ -203,16 +204,16 @@
                 <th class="text-center align-middle"></th>
                 <th class="text-center align-middle">客户名称</th>
                 <th class="text-center align-middle">证件号</th>
-                <th class="text-center align-middle">地址信息</th>
+                <th class="text-center align-middle">联系电话</th>
             </tr>
         </thead>
         <tbody>
             {{each customers cus index}}
-                <tr bind-id="{{cus.id}}" bind-name="{{cus.name}}" bind-cellphone="{{cus.cellphone}}" bind-certificate="{{cus.certificateNumber}}" bind-addr="{{cus.certificateAddr}}">
+                <tr bind-id="{{cus.id}}" bind-name="{{cus.name}}" bind-contacts-phone="{{cus.contactsPhone}}" bind-cellphone="{{cus.cellphone}}" bind-certificate="{{cus.certificateNumber}}" bind-addr="{{cus.certificateAddr}}">
                     <td class="text-center align-middle"><input type="radio" name="customerRadio" value="{{cus.id}}"/></td>
                     <td class="text-center align-middle">{{cus.name}}</td>
                     <td class="text-center align-middle">{{cus.certificateNumber}}</td>
-                    <td class="text-center align-middle">{{cus.certificateAddr}}</td>
+                    <td class="text-center align-middle">{{cus.contactsPhone}}</td>
                 </tr>
             {{/each}}
         </tbody>
