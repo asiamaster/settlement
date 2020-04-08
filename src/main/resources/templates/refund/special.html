@@ -16,9 +16,9 @@
     </div>
     <div class="col-6 text-left">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) { %>
-        <input type="text" class="form-control" maxlength="20" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required/>
+        <input type="text" class="form-control" maxlength="30" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required/>
         <% } else {%>
-        <input type="text" class="form-control" maxlength="20" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required readonly/>
+        <input type="text" class="form-control" maxlength="30" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required readonly/>
         <% }%>
     </div>
 </div>
@@ -28,9 +28,9 @@
     </div>
     <div class="col-6 text-left">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {%>
-        <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankName}" name="bankName" id="bankName" required/>
+        <input type="text" class="form-control" maxlength="50" value="${settleOrder.bankName}" name="bankName" id="bankName" required/>
         <% } else {%>
-        <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankName}" name="bankName" id="bankName" required readonly/>
+        <input type="text" class="form-control" maxlength="50" value="${settleOrder.bankName}" name="bankName" id="bankName" required readonly/>
         <% } %>
     </div>
 </div>
