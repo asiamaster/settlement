@@ -2,7 +2,9 @@
     $(function() {
         //初始化业务类型选择框
         queryBusinessTypeHandler();
-        $('.chk-app-all').change(function() {
+
+        /* 2020-04-09 根据项目负责人要求取消提交单子市场、应用关联验证;因此暂时取消接入应用查询项与对应事件处理脚本 */
+        /*$('.chk-app-all').change(function() {
             $('.chk-app-item').prop("checked", this.checked);
             queryBusinessTypeHandler();
         });
@@ -14,7 +16,8 @@
                 $('.chk-app-all').prop("checked", false);
             }
             queryBusinessTypeHandler();
-        });
+        });*/
+
         $('.chk-type-all').on("change", function() {
             $('.chk-type-item').prop("checked", this.checked);
         });
@@ -68,7 +71,8 @@
 
     /** 查询业务类型 */
     function queryBusinessTypeHandler() {
-        let arr = $('.chk-app-item:checked');
+        /* 2020-04-09 根据项目负责人要求取消提交单子市场、应用关联验证;因此暂时取消接入应用查询项与对应事件处理脚本 */
+        /*let arr = $('.chk-app-item:checked');
         if (arr.length === 0) {
             $('#div-business-type').empty();
             return;
@@ -76,15 +80,16 @@
         let appIds = [];
         for (let temp of arr) {
             appIds.push($(temp).val());
-        }
+        }*/
         $.ajax({
             url:"/applicationConfig/listBusinessType.action",
             type:"POST",
             dataType:"json",
             async:false,
-            data:{
+            /* 2020-04-09 根据项目负责人要求取消提交单子市场、应用关联验证;因此暂时取消接入应用查询项与对应事件处理脚本 */
+            /*data:{
                 "appIds":appIds.join(",")
-            },
+            },*/
             success:function(result) {
                 if (result.code === '200') {
                     $('#div-business-type').html(template("template-business-type", {businessTypeList:result.data}));
