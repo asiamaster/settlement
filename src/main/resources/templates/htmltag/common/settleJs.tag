@@ -198,7 +198,7 @@
     </div>
 </script>
 <script id="template-customer-list" type="text/html">
-    <table id="table-customer-list" class="table table-bordered table-hover">
+    <table id="table-customer-list" class="table table-bordered table-hover" >
         <thead>
             <tr>
                 <th class="text-center align-middle"></th>
@@ -218,4 +218,11 @@
             {{/each}}
         </tbody>
     </table>
+</script>
+<script>
+    $(function(){
+        $(document).on('click', '#table-customer-list tr', function () {
+            $(this).find('[name="customerRadio"]').prop('checked', true);
+        })
+    })
 </script>
