@@ -177,7 +177,7 @@
     /** 结算结果处理器 */
     function settleResultHandler(result) {
         refreshTableHandler();
-        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 结算总金额 <span style="color: red;">'+result.successAmountView+'</span>, 是否确认打印票据?';
+        let message = '当前共选择 '+result.totalNum+' 笔业务, <span style="color: red;">'+result.successNum+'</span> 笔业务成功, 结算成功总金额 <span style="color: red;">'+result.successAmountView+'</span>, 是否确认打印票据?';
         bs4pop.confirm(message, {}, function(sure) {
             if (sure) {
                 bui.loading.show("票据打印中,请稍后。。。");
