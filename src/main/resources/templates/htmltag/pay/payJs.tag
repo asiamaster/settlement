@@ -10,4 +10,9 @@
         let way = $('input[name="way"]:checked').val();
         $('#div-special').load("/settleOrder/forwardPaySpecial.html?way="+way);
     }
+
+    /** 验证支付表单*/
+    function validatePayForm() {
+        return $('#form-pay').valid() && validateSpecial();
+    }
 </script>

@@ -1,9 +1,6 @@
 package com.dili.settlement.rpc;
 
-import com.dili.settlement.domain.ApplicationConfig;
-import com.dili.settlement.domain.MarketApplication;
-import com.dili.settlement.domain.SettleConfig;
-import com.dili.settlement.domain.SettleOrder;
+import com.dili.settlement.domain.*;
 import com.dili.settlement.dto.ApplicationConfigDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
@@ -20,7 +17,7 @@ import java.util.List;
  * 用于结算的rpc
  */
 
-@FeignClient(name = "settlement-service")
+@FeignClient(name = "settlement-service", url = "http://10.28.1.8:8184")
 public interface SettleRpc {
 
     /**
@@ -116,4 +113,11 @@ public interface SettleRpc {
      */
     @RequestMapping(value = "/api/retryRecord/executeCallback")
     void executeCallback();
+
+    /**
+     * code 根据结算单号查询结算明细列表
+     * @return
+     */
+    @RequestMapping(value = "/api/settleWayDetail/listByCode")
+    BaseOutput<List<SettleWayDetail>> listByCode(@RequestParam String code);
 }

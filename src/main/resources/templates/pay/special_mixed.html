@@ -1,0 +1,115 @@
+<%if (isNotEmpty(wayList) && wayList.~size > 0) {
+    for (way in wayList) {
+        if (way.code == 1) { %>
+            <div id="div_${way.code}" class="row mt-2">
+                <div class="col-1"></div>
+                <div class="auto-col text-left">
+                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label style="width: 75px;">${way.val!}</label>
+                </div>
+                <div class="auto-col text-left">
+                    <input type="number" class="form-control floatReserve" placeholder="金额" name="amount_${way.code}" id="amount_${way.code}" min="0.00" max="9999999.99" step="0.01" required uncheck/>
+                </div>
+                <div class="auto-col text-left">
+                    <div class="input-group">
+                        <input type="text" name="chargeDate_${way.code}" id="chargeDate_${way.code}" class="form-control laydate" placeholder="收款日期"/>
+                        <div class="input-group-append">
+                            <label for="chargeDate_${way.code}"  class="input-group-text fa fa-calendar"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="auto-col text-left">
+                    <input type="text" class="form-control" maxlength="40" name="notes_${way.code}" id="notes_${way.code}" placeholder="备注" uncheck/>
+                </div>
+            </div>
+<%       } else { %>
+            <div id="div_${way.code}" class="row mt-2 ignore">
+                <div class="col-1"></div>
+                <div class="auto-col text-left">
+                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label style="width: 75px;">${way.val!}</label>
+                </div>
+                <div class="auto-col text-left">
+                    <input type="number" class="form-control floatReserve" placeholder="金额" name="amount_${way.code}" id="amount_${way.code}" min="0.00" max="9999999.99" step="0.01" required uncheck/>
+                </div>
+                <div class="auto-col text-left">
+                    <input type="text" class="form-control" maxlength="40" name="serialNumber_${way.code}" id="serialNumber_${way.code}" placeholder="流水号" uncheck/>
+                </div>
+                <div class="auto-col text-left">
+                    <div class="input-group">
+                        <input type="text" name="chargeDate_${way.code}" id="chargeDate_${way.code}" class="form-control laydate" placeholder="收款日期"/>
+                        <div class="input-group-append">
+                            <label for="chargeDate_${way.code}"  class="input-group-text fa fa-calendar"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="auto-col text-left">
+                    <input type="text" class="form-control" maxlength="40" name="notes_${way.code}" id="notes_${way.code}" placeholder="备注" uncheck/>
+                </div>
+            </div>
+<%       }
+    }
+} %>
+<div id="div-way-detail" class="d-none"></div>
+<script type="text/javascript">
+    $(function() {
+        //日期范围
+        lay('.laydate').each(function () {
+            laydate.render({
+                elem: this
+                , trigger: 'click'
+                , type: 'date'
+            });
+        });
+
+        $(':checkbox[name="wayCheckBox"]').on("click",  function() {
+            if ($(this).prop("checked")) {
+                $("#div_" + $(this).val()).find("input").each(function(i, obj){
+                    $(obj).removeAttr("uncheck");
+                    $(obj).valid();
+                });
+            } else {
+                $("#div_" + $(this).val()).find("input").each(function(i, obj){
+                    $(obj).attr("uncheck", "");
+                    $(obj).removeClass("is-invalid");
+                    $(obj).removeClass("is-valid");
+                });
+            }
+        });
+    });
+
+    /** 特殊验证*/
+    function validateSpecial() {
+        let arr = $('input[name="wayCheckBox"]:checked');
+        if (arr.length == 0) {
+            showWarning("请先选择组合结算方式");
+            return false;
+        }
+        let totalAmount = parseInt($('#totalAmount').val());
+        let detailList = [];
+        for (let e of arr) {
+            let temp = {};
+            temp.way = $(e).val();
+            temp.amount = $('#amount_' + temp.way).val() * 100;
+            temp.serialNumber = $.trim($('#serialNumber_' + temp.way).val());
+            temp.chargeDate = $.trim($('#chargeDate_' + temp.way).val());
+            temp.notes = $.trim($('#notes_' + temp.way).val());
+            totalAmount -= temp.amount;
+            detailList.push(temp);
+        }
+        debugger;
+        if (totalAmount != 0) {
+            showWarning("收款金额与结算金额不相等");
+            return false;
+        }
+        $('#div-way-detail').html(template('template-way-detail', {detailList : detailList}));
+        return true;
+    }
+</script>
+<script id="template-way-detail" type="text/html">
+    {{each detailList detail index}}
+        <input type="hidden" name="settleWayDetailList[{{index}}].way" value="{{detail.way}}"/>
+        <input type="hidden" name="settleWayDetailList[{{index}}].amount" value="{{detail.amount}}"/>
+        <input type="hidden" name="settleWayDetailList[{{index}}].serialNumber" value="{{detail.serialNumber}}"/>
+        <input type="hidden" name="settleWayDetailList[{{index}}].chargeDate" value="{{detail.chargeDate}}"/>
+        <input type="hidden" name="settleWayDetailList[{{index}}].notes" value="{{detail.notes}}"/>
+    {{/each}}
+</script>

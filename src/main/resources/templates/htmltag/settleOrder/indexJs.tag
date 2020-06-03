@@ -38,6 +38,15 @@
             });
         });
 
+        //日期范围
+        lay('.laydate').each(function () {
+            laydate.render({
+                elem: this
+                , trigger: 'click'
+                , type: 'date'
+            });
+        });
+
         $('#btn-reprint').click(reprintClickHandler);
 
         $(window).resize(function () {
@@ -124,6 +133,34 @@
             }
         });
     }
+
+    /** 结算方式格式化器*/
+    function settleWayFormatter(value, item, index) {
+        if (item.way != ${@com.dili.settlement.enums.SettleWayEnum.MIXED_PAY.getCode()}) {
+            return value;
+        }
+        return '<a href="javascript:;" onclick="showSettleWayDetailHandler(\''+item.code+'\'); return false;">'+ value +'</a>';
+    }
+
+    /** 查看组合结算详情*/
+    function showSettleWayDetailHandler(code) {
+        $.ajax({
+            url:"/settleWayDetail/listByCode.action?code=" + code,
+            type:"POST",
+            dataType:"json",
+            success:function(result) {
+                if (result.code === '200') {
+                    $('#dialog-way-detail .modal-body').html(template('template-way-detail', {detailList : result.data}));
+                    $('#dialog-way-detail').modal('show');
+                } else {
+                    showError(result.message);
+                }
+            },
+            error:function() {
+                showError("系统异常,请稍后重试");
+            }
+        });
+    }
 </script>
 
 <script id="template-business-type" type="text/html">
@@ -135,4 +172,29 @@
             </div>
         </div>
     {{/each}}
+</script>
+
+<script id="template-way-detail" type="text/html">
+    <table id="table-way-list" class="table table-bordered table-hover" >
+        <thead>
+        <tr>
+            <th class="text-center align-middle">结算方式</th>
+            <th class="text-center align-middle">金额</th>
+            <th class="text-center align-middle">流水号</th>
+            <th class="text-center align-middle">收款日期</th>
+            <th class="text-center align-middle">备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{each detailList detail index}}
+        <tr>
+            <td class="text-center align-middle">{{detail.wayName}}</td>
+            <td class="text-center align-middle">{{detail.amountView}}</td>
+            <td class="text-center align-middle">{{detail.serialNumber ? detail.serialNumber : '-'}}</td>
+            <td class="text-center align-middle">{{detail.chargeDate ? detail.chargeDate : '-'}}</td>
+            <td class="text-center align-middle">{{detail.notes ? detail.notes : '-'}}</td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
 </script>

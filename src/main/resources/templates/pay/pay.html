@@ -4,12 +4,13 @@
         <input type="text" style="display: none"/>
         <input type="hidden" name="token" value="${token!}"/>
         <input type="hidden" name="ids" value="${ids!}"/>
+        <input type="hidden" name="totalAmount" id="totalAmount" value="${totalAmount!}"/>
         <div class="row">
             <div class="col-2 text-right">
                 结算金额:
             </div>
             <div class="col-6 text-left">
-                <input type="text" class="form-control" value="${totalAmount!}" readonly/>
+                <input type="text" class="form-control" value="${totalAmountView!}" readonly/>
             </div>
         </div>
         <div class="row mt-2">
@@ -29,10 +30,11 @@
             </div>
             <% }}} %>
         </div>
-        <div class="row mt-2" id="div-special">
+        <div class="" id="div-special">
 
         </div>
     </form>
 </div>
 </#bs4Body>
+<#common_commonJs/>
 <#pay_payJs/>

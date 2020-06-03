@@ -20,7 +20,7 @@
             content:url,
             title:'结算收费',
             isIframe:true,
-            width:700,
+            width:950,
             height:500,
             btns:[
                 {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
@@ -31,9 +31,13 @@
 
     /** 支付弹框确定按钮点击事件处理器 */
     function dialogCertainClickHandler(e, $iframe) {
-        if (!$iframe.contents().find('#form-pay').valid()) {
+        bui.loading.show('数据验证中，请稍候。。。');
+        let win = $iframe[0].contentWindow;
+        if (!win.validatePayForm()) {
+            bui.loading.hide();
             return false;
         }
+        bui.loading.hide();
         bui.loading.show('努力提交中，请稍候。。。');
         $.ajax({
             type:"POST",

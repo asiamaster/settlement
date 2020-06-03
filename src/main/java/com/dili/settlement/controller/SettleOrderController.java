@@ -16,6 +16,7 @@ import com.dili.settlement.dto.SettleResultDto;
 import com.dili.settlement.enums.*;
 import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
+import com.dili.settlement.service.SettleWayService;
 import com.dili.settlement.util.DateUtil;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
@@ -68,6 +69,9 @@ public class SettleOrderController {
 
     @Resource
     private SettleTypeDispatchHandler settleTypeDispatchHandler;
+
+    @Resource
+    private SettleWayService settleWayService;
 
     /**
      * 跳转到支付页面
@@ -162,16 +166,12 @@ public class SettleOrderController {
             settleOrderDto.setIdList(Stream.of(settleOrderDto.getIds().split(",")).map(id -> Long.parseLong(id)).collect(Collectors.toList()));
             BaseOutput<Long> amountBaseOutput = settleRpc.queryTotalAmount(settleOrderDto);
             if (amountBaseOutput.isSuccess()) {
-                modelMap.addAttribute("totalAmount", MoneyUtils.centToYuan(amountBaseOutput.getData()));
+                modelMap.addAttribute("totalAmount", amountBaseOutput.getData());
+                modelMap.addAttribute("totalAmountView", MoneyUtils.centToYuan(amountBaseOutput.getData()));
             }
             UserTicket userTicket = getUserTicket();
-            SettleConfig settleConfig = new SettleConfig();
-            settleConfig.setGroupCode(SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
-            settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
-            BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
-            if (configBaseOutput.isSuccess()) {
-                modelMap.addAttribute("wayList", configBaseOutput.getData());
-            }
+            List<SettleConfig> wayList = settleWayService.payChooseList(settleOrderDto.getIdList().size() > 1);
+            modelMap.addAttribute("wayList", wayList);
             modelMap.addAttribute("token", tokenHandler.generate(createTokenStr(userTicket, settleOrderDto)));
             modelMap.addAttribute("ids", settleOrderDto.getIds());
             return "pay/pay";
