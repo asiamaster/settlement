@@ -17,7 +17,7 @@ import java.util.List;
  * 用于结算的rpc
  */
 
-@FeignClient(name = "settlement-service", url = "http://10.28.1.8:8184")
+@FeignClient(name = "settlement-service")
 public interface SettleRpc {
 
     /**
