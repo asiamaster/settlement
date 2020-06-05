@@ -20,11 +20,11 @@
             content:url,
             title:'结算收费',
             isIframe:true,
-            width:950,
-            height:500,
+            width: '90%',
+            height: 600,
             btns:[
-                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
-                {label: '取消',className: 'btn-secondary'}
+                {label: '取消',className: 'btn-secondary'},
+                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}
             ]
         });
     }

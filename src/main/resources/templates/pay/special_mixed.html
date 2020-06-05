@@ -2,14 +2,14 @@
     for (way in wayList) {
         if (way.code == 1) { %>
             <div id="div_${way.code}" class="row mt-2">
-                <div class="col-1"></div>
-                <div class="auto-col text-left">
-                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label style="width: 75px;">${way.val!}</label>
+                <div class="col-2 text-right">
+                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label>${way.val!}</label>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-1 p-0">
                     <input type="number" class="form-control floatReserve" placeholder="金额" name="amount_${way.code}" id="amount_${way.code}" min="0.00" max="9999999.99" step="0.01" required uncheck/>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-2 p-0"></div>
+                <div class="col-2 text-right p-0">
                     <div class="input-group">
                         <input type="text" name="chargeDate_${way.code}" id="chargeDate_${way.code}" class="form-control laydate" placeholder="收款日期"/>
                         <div class="input-group-append">
@@ -17,23 +17,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-4 p-0">
                     <input type="text" class="form-control" maxlength="40" name="notes_${way.code}" id="notes_${way.code}" placeholder="备注" uncheck/>
                 </div>
             </div>
 <%       } else { %>
-            <div id="div_${way.code}" class="row mt-2 ignore">
-                <div class="col-1"></div>
-                <div class="auto-col text-left">
-                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label style="width: 75px;">${way.val!}</label>
+            <div id="div_${way.code}" class="row mt-2 ignore p-0">
+                <div class="col-2 text-right">
+                    <input type="checkbox" value="${way.code}" name="wayCheckBox"/><label>${way.val!}</label>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-1 p-0">
                     <input type="number" class="form-control floatReserve" placeholder="金额" name="amount_${way.code}" id="amount_${way.code}" min="0.00" max="9999999.99" step="0.01" required uncheck/>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-2 p-0">
                     <input type="text" class="form-control" maxlength="40" name="serialNumber_${way.code}" id="serialNumber_${way.code}" placeholder="流水号" uncheck/>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-2 p-0">
                     <div class="input-group">
                         <input type="text" name="chargeDate_${way.code}" id="chargeDate_${way.code}" class="form-control laydate" placeholder="收款日期"/>
                         <div class="input-group-append">
@@ -41,7 +40,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="auto-col text-left">
+                <div class="col-4 text-right p-0">
                     <input type="text" class="form-control" maxlength="40" name="notes_${way.code}" id="notes_${way.code}" placeholder="备注" uncheck/>
                 </div>
             </div>
