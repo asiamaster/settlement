@@ -20,7 +20,7 @@
             content:url,
             title:'结算收费',
             isIframe:true,
-            width: '90%',
+            width: '95%',
             height: 600,
             btns:[
                 {label: '取消',className: 'btn-secondary'},
