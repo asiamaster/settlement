@@ -213,7 +213,7 @@ public class SettleOrderController {
             }
             return payDispatchHandler.pay(settleOrderDto);
         } catch (BusinessException e) {
-            return BaseOutput.failure(e.getErrorMsg());
+            return BaseOutput.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("method pay", e);
             return BaseOutput.failure();
@@ -290,7 +290,7 @@ public class SettleOrderController {
             }
             return refundDispatchHandler.refund(settleOrderDto);
         } catch (BusinessException e) {
-            return BaseOutput.failure(e.getErrorMsg());
+            return BaseOutput.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("method refund", e);
             return BaseOutput.failure();
@@ -326,8 +326,8 @@ public class SettleOrderController {
             String url = settleTypeDispatchHandler.getPrintUrl(query);
             return businessRpc.loadPrintData(url);
         } catch (BusinessException e) {
-            LOGGER.error("method loadPrintData", e.getErrorMsg());
-            return BaseOutput.failure(e.getErrorMsg());
+            LOGGER.error("method loadPrintData", e.getMessage());
+            return BaseOutput.failure(e.getMessage());
         } catch (Exception e) {
             LOGGER.error("method loadPrintData", e);
             return BaseOutput.failure();
