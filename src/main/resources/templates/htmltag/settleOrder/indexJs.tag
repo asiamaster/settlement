@@ -32,6 +32,7 @@
         //时间范围
         lay('.laydatetime').each(function () {
             laydate.render({
+                theme: '#007bff',
                 elem: this
                 , trigger: 'click'
                 , type: 'datetime'
@@ -41,6 +42,7 @@
         //日期范围
         lay('.laydate').each(function () {
             laydate.render({
+                theme: '#007bff',
                 elem: this
                 , trigger: 'click'
                 , type: 'date'
