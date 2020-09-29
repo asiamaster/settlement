@@ -29,7 +29,7 @@ public class MixedPayServiceImpl extends PayServiceImpl implements PayService {
 
     @Override
     public String forwardSpecial(SettleOrderDto settleOrderDto, ModelMap modelMap) {
-        List<SettleConfig> wayList = settleWayService.payFormList();
+        List<SettleConfig> wayList = settleWayService.payFormList(settleOrderDto.getMarketId());
         modelMap.addAttribute("wayList", wayList);
         return "pay/special_mixed";
     }

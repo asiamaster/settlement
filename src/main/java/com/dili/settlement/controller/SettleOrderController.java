@@ -170,7 +170,7 @@ public class SettleOrderController {
                 modelMap.addAttribute("totalAmountView", MoneyUtils.centToYuan(amountBaseOutput.getData()));
             }
             UserTicket userTicket = getUserTicket();
-            List<SettleConfig> wayList = settleWayService.payChooseList(settleOrderDto.getIdList().size() > 1);
+            List<SettleConfig> wayList = settleWayService.payChooseList(userTicket.getFirmId(), settleOrderDto.getIdList().size() > 1);
             modelMap.addAttribute("wayList", wayList);
             modelMap.addAttribute("token", tokenHandler.generate(createTokenStr(userTicket, settleOrderDto)));
             modelMap.addAttribute("ids", settleOrderDto.getIds());
@@ -189,6 +189,7 @@ public class SettleOrderController {
     @RequestMapping(value = "/forwardPaySpecial.html")
     public String forwardPaySpecial(SettleOrderDto settleOrderDto, ModelMap modelMap) {
         try {
+            settleOrderDto.setMarketId(getUserTicket().getFirmId());
             return payDispatchHandler.forwardSpecial(settleOrderDto, modelMap);
         } catch (Exception e) {
             LOGGER.error("method forwardPaySpecial", e);
@@ -239,6 +240,7 @@ public class SettleOrderController {
             }
             UserTicket userTicket = getUserTicket();
             SettleConfig settleConfig = new SettleConfig();
+            settleConfig.setMarketId(userTicket.getFirmId());
             settleConfig.setGroupCode(SettleGroupCodeEnum.SETTLE_WAY_REFUND.getCode());
             settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
             BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);
@@ -266,6 +268,7 @@ public class SettleOrderController {
     @RequestMapping(value = "/forwardRefundSpecial.html")
     public String forwardRefundSpecial(SettleOrderDto settleOrderDto, ModelMap modelMap) {
         try {
+            settleOrderDto.setMarketId(getUserTicket().getFirmId());
             return refundDispatchHandler.forwardSpecial(settleOrderDto, modelMap);
         } catch (Exception e) {
             LOGGER.error("method forwardRefundSpecial", e);

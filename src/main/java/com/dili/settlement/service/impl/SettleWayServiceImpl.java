@@ -23,8 +23,8 @@ public class SettleWayServiceImpl implements SettleWayService {
     private SettleRpc settleRpc;
 
     @Override
-    public List<SettleConfig> payChooseList(boolean multi) {
-        List<SettleConfig> itemList = list(SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
+    public List<SettleConfig> payChooseList(Long marketId, boolean multi) {
+        List<SettleConfig> itemList = list(marketId, SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
         if (multi) {
             itemList.removeIf(settleConfig -> settleConfig.getCode().equals(SettleWayEnum.MIXED_PAY.getCode()));
         }
@@ -32,9 +32,9 @@ public class SettleWayServiceImpl implements SettleWayService {
     }
 
     @Override
-    public List<SettleConfig> payFormList() {
-        List<SettleConfig> itemList = list(SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
-        itemList.removeIf(settleConfig -> settleConfig.getCode().equals(SettleWayEnum.MIXED_PAY.getCode()) || settleConfig.getCode().equals(SettleWayEnum.VIRTUAL_PAY.getCode()));
+    public List<SettleConfig> payFormList(Long marketId) {
+        List<SettleConfig> itemList = list(marketId, SettleGroupCodeEnum.SETTLE_WAY_PAY.getCode());
+        itemList.removeIf(settleConfig -> settleConfig.getCode().equals(SettleWayEnum.MIXED_PAY.getCode()) || settleConfig.getCode().equals(SettleWayEnum.VIRTUAL_PAY.getCode()) || settleConfig.getCode().equals(SettleWayEnum.CARD.getCode()));
         return itemList;
     }
 
@@ -42,8 +42,9 @@ public class SettleWayServiceImpl implements SettleWayService {
      * 公共查询方法
      * @return
      */
-    private List<SettleConfig> list(int groupCode) {
+    private List<SettleConfig> list(Long marketId, int groupCode) {
         SettleConfig settleConfig = new SettleConfig();
+        settleConfig.setMarketId(marketId);
         settleConfig.setGroupCode(groupCode);
         settleConfig.setState(ConfigStateEnum.ENABLE.getCode());
         BaseOutput<List<SettleConfig>> configBaseOutput = settleRpc.listSettleConfig(settleConfig);

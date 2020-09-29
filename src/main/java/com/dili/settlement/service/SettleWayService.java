@@ -14,11 +14,11 @@ public interface SettleWayService {
      * @param multi
      * @return
      */
-    List<SettleConfig> payChooseList(boolean multi);
+    List<SettleConfig> payChooseList(Long marketId, boolean multi);
 
     /**
      * 查询结算方式 仅用于组合支付表单项
      * @return
      */
-    List<SettleConfig> payFormList();
+    List<SettleConfig> payFormList(Long marketId);
 }
