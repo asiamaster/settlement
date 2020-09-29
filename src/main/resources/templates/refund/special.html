@@ -2,7 +2,7 @@
     <div class="col-2 text-right">
         卡主:
     </div>
-    <div class="col-6 text-left">
+    <div class="col-4 text-left">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) { %>
         <input type="text" class="form-control" maxlength="40" value="${settleOrder.bankCardHolder}" name="bankCardHolder" id="bankCardHolder" required/>
         <% } else {%>
@@ -14,7 +14,7 @@
     <div class="col-2 text-right">
         银行卡号:
     </div>
-    <div class="col-6 text-left">
+    <div class="col-4 text-left">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) { %>
         <input type="text" class="form-control" maxlength="30" value="${settleOrder.accountNumber}" name="accountNumber" id="accountNumber" required/>
         <% } else {%>
@@ -26,7 +26,7 @@
     <div class="col-2 text-right">
         银行名称:
     </div>
-    <div class="col-6 text-left">
+    <div class="col-4 text-left">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {%>
         <input type="text" class="form-control" maxlength="50" value="${settleOrder.bankName}" name="bankName" id="bankName" required/>
         <% } else {%>
@@ -38,7 +38,7 @@
     <div class="col-2 text-right">
         流水号:
     </div>
-    <div class="col-6 text-left">
+    <div class="col-4 text-left">
         <input type="text" class="form-control" maxlength="40" name="serialNumber" id="serialNumber"/>
     </div>
 </div>

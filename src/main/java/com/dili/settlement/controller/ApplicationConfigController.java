@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  */
 @Controller
 @RequestMapping(value = "/applicationConfig")
-public class ApplicationConfigController {
+public class ApplicationConfigController implements IBaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationConfigController.class);
 
     @Resource

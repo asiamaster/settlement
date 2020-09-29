@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/settleWayDetail")
-public class SettleWayDetailController {
+public class SettleWayDetailController implements IBaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SettleWayDetailController.class);
 
     @Resource

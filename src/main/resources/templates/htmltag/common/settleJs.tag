@@ -5,10 +5,11 @@
         queryTypeChangeHandler();
         $('input[name="queryType"]').change(queryTypeChangeHandler);
         $('#btn-swipe-card').click(swipeCardClickHandler);
+        $('#btn-query').click(queryCustomerHandler);
         $('#btn-clear').click(clearClickHandler);
         $('#keyword').keydown(function(e) {
             if (e.keyCode === 13) {
-                enterClickHandler();
+                queryCustomerHandler();
             }
         });
         //选择客户列表 确定按钮事件
@@ -36,47 +37,34 @@
             case "1":
                 $('#keyword').val("").prop("placeholder", "请输入客户姓名");
                 $('#btn-swipe-card').parent().addClass("d-none");
-                $('#btn-query').unbind("click");
-                $('#btn-query').click(queryByNameHandler);
                 break;
             case "2":
                 $('#keyword').val("").prop("placeholder", "请输入证件号或刷卡");
                 $('#btn-swipe-card').parent().removeClass("d-none");
-                $('#btn-query').unbind("click");
-                $('#btn-query').click(queryByCertificateHandler);
+                break;
+            case "3":
+                $('#keyword').val("").prop("placeholder", "请输入园区卡号或刷卡");
+                $('#btn-swipe-card').parent().removeClass("d-none");
                 break;
             default:
                 $('#keyword').val("").prop("placeholder", "请输入客户姓名");
                 $('#btn-swipe-card').parent().addClass("d-none");
-                $('#btn-query').unbind("click");
-                $('#btn-query').click(queryByNameHandler);
                 break;
         }
     }
 
-    /** 根据客户姓名查询处理器 */
-    function queryByNameHandler() {
+    /** 客户查询处理器 */
+    function queryCustomerHandler() {
         $('#customer-info').addClass("d-none");
         $('#settle-order-list').addClass("d-none");
         let keyword = $('#keyword').val();
+        let queryType = $('input[name="queryType"]:checked').val();
         if (keyword === undefined || $.trim(keyword) === '') {
             return;
         }
         let params = {};
-        params.name = $.trim(keyword);
-        requestCustomerHandler(params);
-    }
-
-    /** 根据证件号查询处理器 */
-    function queryByCertificateHandler() {
-        $('#customer-info').addClass("d-none");
-        $('#settle-order-list').addClass("d-none");
-        let keyword = $('#keyword').val();
-        if (keyword === undefined || $.trim(keyword) === '') {
-            return;
-        }
-        let params = {};
-        params.certificateNumber = $.trim(keyword);
+        params.keyword = $.trim(keyword);
+        params.queryType = $.trim(queryType);
         requestCustomerHandler(params);
     }
 
@@ -147,29 +135,37 @@
         if(typeof(callbackObj) === "undefined"){
             return;
         }
-        setTimeout(function(){
-            var card = callbackObj.readIDCard();
-            if(card === undefined || $.trim(card) === ""){
-                return;
-            }
-            var info = eval('(' + card + ')');
-            if(typeof(info)=="undefined"){
-                showInfo("请检查读取身份证的设备是否已连接");
-            }else{
-                $("#keyword").val(info.IDCardNo);
-            }
-        },50);
-    }
-
-    /** 关键字文本框回车事件处理器 */
-    function enterClickHandler() {
         let queryType = $('input[name="queryType"]:checked').val();
         switch (queryType) {
-            case "1":
-                queryByNameHandler();
-                break
             case "2":
-                queryByCertificateHandler();
+                setTimeout(function(){
+                    var result = callbackObj.readIDCard();
+                    if(result === undefined || $.trim(result) === ""){
+                        return;
+                    }
+                    var info = eval('(' + result + ')');
+                    if(typeof(info)=="undefined") {
+                        showInfo("请检查读取身份证的设备是否已连接");
+                    } else {
+                        $("#keyword").val(info.IDCardNo);
+                        queryCustomerHandler();
+                    }
+                }, 50);
+                break;
+            case "3":
+                setTimeout(function(){
+                    var result = callbackObj.readCardNumber();
+                    if(result === undefined || $.trim(result) === ""){
+                        return;
+                    }
+                    var info = eval('(' + result + ')');
+                    if(typeof(info)=="undefined") {
+                        showInfo("请检查读取身份证的设备是否已连接");
+                    } else {
+                        $("#keyword").val(info.data);
+                        queryCustomerHandler();
+                    }
+                }, 50);
                 break;
         }
     }

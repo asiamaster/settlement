@@ -21,7 +21,7 @@
             title:'结算收费',
             isIframe:true,
             width: '95%',
-            height: 600,
+            height: 500,
             btns:[
                 {label: '取消',className: 'btn-secondary'},
                 {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}

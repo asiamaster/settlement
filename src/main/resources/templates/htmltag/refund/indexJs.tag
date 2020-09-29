@@ -20,11 +20,11 @@
             content:url,
             title:'退款',
             isIframe:true,
-            width:950,
+            width:'95%',
             height:500,
             btns:[
-                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
-                {label: '取消',className: 'btn-secondary'}
+                {label: '取消',className: 'btn-secondary'},
+                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}
             ]
         });
     }

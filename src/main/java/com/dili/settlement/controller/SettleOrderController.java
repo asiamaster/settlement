@@ -13,7 +13,10 @@ import com.dili.settlement.dto.ApplicationConfigDto;
 import com.dili.settlement.dto.PrintDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
-import com.dili.settlement.enums.*;
+import com.dili.settlement.enums.ConfigStateEnum;
+import com.dili.settlement.enums.SettleGroupCodeEnum;
+import com.dili.settlement.enums.SettleStateEnum;
+import com.dili.settlement.enums.SettleTypeEnum;
 import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
 import com.dili.settlement.service.SettleWayService;
@@ -21,11 +24,9 @@ import com.dili.settlement.util.DateUtil;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.domain.EasyuiPageOutput;
 import com.dili.ss.domain.PageOutput;
-import com.dili.ss.dto.DTOUtils;
 import com.dili.ss.exception.BusinessException;
 import com.dili.ss.util.MoneyUtils;
 import com.dili.uap.sdk.domain.UserTicket;
-import com.dili.uap.sdk.session.SessionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -49,7 +50,7 @@ import java.util.stream.Stream;
 
 @Controller
 @RequestMapping("/settleOrder")
-public class SettleOrderController {
+public class SettleOrderController implements IBaseController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SettleOrderController.class);
 
     @Resource
@@ -387,15 +388,6 @@ public class SettleOrderController {
             LOGGER.error("method listPage", e);
         }
         return new EasyuiPageOutput(0, new ArrayList(0)).toString();
-    }
-
-    /**
-     * 获取登录用户信息 如为null则new一个，以免空指针
-     * @return
-     */
-    private UserTicket getUserTicket() {
-        UserTicket userTicket = SessionContext.getSessionContext().getUserTicket();
-        return userTicket != null ? userTicket : DTOUtils.newInstance(UserTicket.class);
     }
 
     /**
