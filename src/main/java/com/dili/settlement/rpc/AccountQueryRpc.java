@@ -1,10 +1,13 @@
 package com.dili.settlement.rpc;
 
+import com.dili.settlement.dto.AccountSimpleResponseDto;
 import com.dili.settlement.dto.UserAccountCardResponseDto;
 import com.dili.settlement.dto.UserAccountSingleQueryDto;
 import com.dili.ss.domain.BaseOutput;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 卡相关rpc
@@ -20,4 +23,12 @@ public interface AccountQueryRpc {
      */
     @PostMapping(value = "/getSingle")
     BaseOutput<UserAccountCardResponseDto> findSingle(UserAccountSingleQueryDto cardQuery);
+
+    /**
+     * 账户信息，包含余额
+     * @author miaoguoxin
+     * @date 2020/7/7
+     */
+    @GetMapping("/simpleInfo")
+    BaseOutput<AccountSimpleResponseDto> getInfoByCardNo(@RequestParam String cardNo, @RequestParam Long firmId);
 }

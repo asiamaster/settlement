@@ -43,6 +43,77 @@
         });
     }
 
+    /** 园区刷卡处理 */
+    function cardReader(callback) {
+        setTimeout(function(){
+            var result = callbackObj.readCardNumber();
+            if(result === undefined || $.trim(result) === ""){
+                return;
+            }
+            var info = eval('(' + result + ')');
+            if(typeof(info)=="undefined") {
+                showInfo("请检查读取园区卡的设备是否已连接");
+            } else if(info.success){
+                callback(info.data);
+            } else {
+                showInfo(info.message);
+            }
+        }, 50);
+    }
+
+    /** 身份证刷卡处理 */
+    function idCardReader(callback) {
+        setTimeout(function(){
+            var result = callbackObj.readIDCard();
+            if(result === undefined || $.trim(result) === ""){
+                return;
+            }
+            var info = eval('(' + result + ')');
+            if(typeof(info)=="undefined") {
+                showInfo("请检查读取身份证的设备是否已连接");
+            } else {
+                callback(info.IDCardNo);
+            }
+        }, 50);
+    }
+
+    /** 密码设备处理 */
+    function passwordReader(callback) {
+        setTimeout(function(){
+            var result = callbackObj.readPasswordKeyboard();
+            if(result === undefined || $.trim(result) === ""){
+                return;
+            }
+            var info = eval('(' + result + ')');
+            if(typeof(info)=="undefined") {
+                showInfo("请检查读取身份证的设备是否已连接");
+            } else if(info.success){
+                callback(info.data);
+            } else {
+                showInfo(info.message);
+            }
+        }, 50);
+    }
+
+    /** 查询账户信息 */
+    function queryAccountHandler(cardNo, callback) {
+        $.ajax({
+            url:"/accountQuery/simpleInfo.action?cardNo=" + cardNo,
+            type:"GET",
+            dataType:"json",
+            success:function (ret) {
+                if (ret.success) {
+                    callback(ret.data);
+                } else {
+                    showError(ret.message);
+                }
+            },
+            error:function () {
+                showError("查询账户信息失败,请稍后重试");
+            }
+        });
+    }
+
     /** 错误消息提示框 */
     function showError(message) {
         bs4pop.alert(message, {type : "error"});

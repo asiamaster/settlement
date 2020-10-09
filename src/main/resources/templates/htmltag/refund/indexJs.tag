@@ -31,6 +31,13 @@
 
     /** 退款弹框确定按钮点击事件处理器 */
     function dialogCertainClickHandler(e, $iframe) {
+        bui.loading.show('数据验证中，请稍候。。。');
+        let win = $iframe[0].contentWindow;
+        if (!win.validatePayForm()) {
+            bui.loading.hide();
+            return false;
+        }
+        bui.loading.hide();
         if (!$iframe.contents().find('#form-refund').valid()) {
             return false;
         }

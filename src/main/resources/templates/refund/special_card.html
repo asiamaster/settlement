@@ -1,14 +1,22 @@
 <div class="row mt-2">
+    <input type="hidden" name="tradeFundAccountId" id="tradeFundAccountId" value="${settleOrder.tradeFundAccountId!}"/>
+    <input type="hidden" name="tradeAccountId" id="tradeAccountId" value="${settleOrder.tradeAccountId!}"/>
+    <input type="hidden" name="tradeCustomerId" id="tradeCustomerId" value="${settleOrder.tradeCustomerId!}"/>
+    <input type="hidden" name="tradeCardNo" id="tradeCardNo" value="${settleOrder.tradeCardNo!}"/>
     <div class="col-2 text-right">
         卡号:
     </div>
     <div class="col-4">
+        <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {%>
         <div class="input-group">
-            <input type="text" name="tradeCardNo" id="tradeCardNo" class="form-control" maxlength="20" required/>
+            <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required/>
             <div class="input-group-append">
                 <span class="input-group-text"><a id="cardReader" href="javascript:;">刷园区卡</a></span>
             </div>
         </div>
+        <% } else {%>
+        <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required readonly/>
+        <% } %>
     </div>
 </div>
 <div class="row mt-2">
@@ -16,6 +24,70 @@
         卡主:
     </div>
     <div class="col-4">
-        <input type="text" class="form-control" maxlength="40" name="tradeCustomerName" id="tradeCustomerName" readonly/>
+        <input type="text" class="form-control" maxlength="40" name="tradeCustomerName" id="tradeCustomerName" value="${settleOrder.tradeCustomerName!}" readonly/>
     </div>
 </div>
+<script type="text/javascript">
+    $(function() {
+        /** 监听卡号回车事件 */
+        $('#cardNo').keydown(function(e) {
+            if (e.keyCode === 13) {
+                clearAccountInfo();
+                queryAccountInfo();
+            }
+        });
+
+        /** 刷卡事件处理 */
+        $('#cardReader').click(function () {
+            $('#cardNo').val('');
+            clearAccountInfo();
+            cardReader(function (cardNo) {
+                $('#cardNo').val(cardNo);
+                queryAccountInfo();
+            });
+        });
+    });
+
+    /** 当卡号相关事件触发时情况上一次查询结果 */
+    function clearAccountInfo() {
+        $('#tradeFundAccountId').val('');
+        $('#tradeAccountId').val('');
+        $('#tradeCustomerId').val('');
+        $('#tradeCustomerName').val('');
+        $('#tradeCardNo').val('');
+    }
+
+    //日期范围
+    lay('.laydate').each(function () {
+        laydate.render({
+            theme: '#007bff',
+            elem: this
+            , trigger: 'click'
+            , type: 'date'
+        });
+    });
+
+    /** 查询账户信息 */
+    function queryAccountInfo() {
+        let cardNo = $('#cardNo').val();
+        if (!cardNo || $.trim(cardNo).length === 0) {
+            return;
+        }
+        queryAccountHandler($.trim(cardNo), function(data) {
+            $('#tradeFundAccountId').val(data.accountFund.accountId);
+            $('#tradeAccountId').val(data.accountInfo.accountId);
+            $('#tradeCustomerId').val(data.accountInfo.customerId);
+            $('#tradeCustomerName').val(data.accountInfo.customerName);
+            $('#tradeCardNo').val(data.accountInfo.cardNo);
+        });
+    }
+
+    /** 特殊验证*/
+    function validateSpecial() {
+        let tradeFundAccountId = $('#tradeFundAccountId').val();
+        if (!tradeFundAccountId) {
+            showError("未查询到资金账户");
+            return false;
+        }
+    }
+</script>

@@ -138,34 +138,16 @@
         let queryType = $('input[name="queryType"]:checked').val();
         switch (queryType) {
             case "2":
-                setTimeout(function(){
-                    var result = callbackObj.readIDCard();
-                    if(result === undefined || $.trim(result) === ""){
-                        return;
-                    }
-                    var info = eval('(' + result + ')');
-                    if(typeof(info)=="undefined") {
-                        showInfo("请检查读取身份证的设备是否已连接");
-                    } else {
-                        $("#keyword").val(info.IDCardNo);
-                        queryCustomerHandler();
-                    }
-                }, 50);
+                idCardReader(function(idCard) {
+                    $("#keyword").val(idCard);
+                    queryCustomerHandler();
+                });
                 break;
             case "3":
-                setTimeout(function(){
-                    var result = callbackObj.readCardNumber();
-                    if(result === undefined || $.trim(result) === ""){
-                        return;
-                    }
-                    var info = eval('(' + result + ')');
-                    if(typeof(info)=="undefined") {
-                        showInfo("请检查读取身份证的设备是否已连接");
-                    } else {
-                        $("#keyword").val(info.data);
-                        queryCustomerHandler();
-                    }
-                }, 50);
+                cardReader(function(cardNo) {
+                    $("#keyword").val(cardNo);
+                    queryCustomerHandler();
+                });
                 break;
         }
     }

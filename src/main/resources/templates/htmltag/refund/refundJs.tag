@@ -12,4 +12,9 @@
             $('#div-special').load("/settleOrder/forwardRefundSpecial.html?way="+way+"&ids="+$('#ids').val());
         }
     }
+
+    /** 退款表单验证 */
+    function validateRefundForm() {
+        return $('#form-refund').valid() && validateSpecial();
+    }
 </script>

@@ -1,10 +1,15 @@
 <div class="row mt-2">
+    <input type="hidden" name="tradeFundAccountId" id="tradeFundAccountId"/>
+    <input type="hidden" name="tradeAccountId" id="tradeAccountId"/>
+    <input type="hidden" name="tradeAvailableAmount" id="tradeAvailableAmount"/>
+    <input type="hidden" name="tradeCustomerId" id="tradeCustomerId"/>
+    <input type="hidden" name="tradeCardNo" id="tradeCardNo"/>
     <div class="col-2 text-right">
         卡号:
     </div>
     <div class="col-4">
         <div class="input-group">
-            <input type="text" name="tradeCardNo" id="tradeCardNo" class="form-control" maxlength="20" required/>
+            <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required/>
             <div class="input-group-append">
                 <span class="input-group-text"><a id="cardReader" href="javascript:;">刷园区卡</a></span>
             </div>
@@ -41,6 +46,46 @@
     </div>
 </div>
 <script type="text/javascript">
+
+    $(function() {
+        /** 监听卡号回车事件 */
+        $('#cardNo').keydown(function(e) {
+            if (e.keyCode === 13) {
+                clearAccountInfo();
+                queryAccountInfo();
+            }
+        });
+
+        /** 刷卡事件处理 */
+        $('#cardReader').click(function () {
+            $('#cardNo').val('');
+            clearAccountInfo();
+            cardReader(function (cardNo) {
+                $('#cardNo').val(cardNo);
+                queryAccountInfo();
+            });
+        });
+
+        /** 密码事件处理 */
+        $('#passwordReader').click(function () {
+            $('#tradePassword').val('');
+            passwordReader(function (password) {
+                $('#tradePassword').val(password);
+            });
+        });
+    });
+
+    /** 当卡号相关事件触发时情况上一次查询结果 */
+    function clearAccountInfo() {
+        $('#tradeFundAccountId').val('');
+        $('#tradeAccountId').val('');
+        $('#tradeAvailableAmount').val('');
+        $('#tradeCustomerId').val('');
+        $('#tradeCustomerName').val('');
+        $('#tradeBalance').val('');
+        $('#tradeCardNo').val('');
+    }
+
     //日期范围
     lay('.laydate').each(function () {
         laydate.render({
@@ -51,8 +96,35 @@
         });
     });
 
+    /** 查询账户信息 */
+    function queryAccountInfo() {
+        let cardNo = $('#cardNo').val();
+        if (!cardNo || $.trim(cardNo).length === 0) {
+            return;
+        }
+        queryAccountHandler($.trim(cardNo), function(data) {
+            $('#tradeFundAccountId').val(data.accountFund.accountId);
+            $('#tradeAccountId').val(data.accountInfo.accountId);
+            $('#tradeAvailableAmount').val(data.accountFund.availableAmount);
+            $('#tradeCustomerId').val(data.accountInfo.customerId);
+            $('#tradeCustomerName').val(data.accountInfo.customerName);
+            $('#tradeBalance').val(data.accountFund.availableAmountView);
+            $('#tradeCardNo').val(data.accountInfo.cardNo);
+        });
+    }
+
     /** 特殊验证*/
     function validateSpecial() {
-        return true;
+        let tradeFundAccountId = $('#tradeFundAccountId').val();
+        if (!tradeFundAccountId) {
+            showError("未查询到资金账户");
+            return false;
+        }
+        let totalAmount = parseInt($('#totalAmount').val());
+        let tradeAvailableAmount = parseInt($('#tradeAvailableAmount').val());
+        if (totalAmount > tradeAvailableAmount) {
+            showInfo("账户余额不足");
+            return false;
+        }
     }
 </script>

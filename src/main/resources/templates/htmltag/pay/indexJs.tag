@@ -33,7 +33,7 @@
     function dialogCertainClickHandler(e, $iframe) {
         bui.loading.show('数据验证中，请稍候。。。');
         let win = $iframe[0].contentWindow;
-        if (!win.validatePayForm()) {
+        if (!win.validateRefundForm()) {
             bui.loading.hide();
             return false;
         }
