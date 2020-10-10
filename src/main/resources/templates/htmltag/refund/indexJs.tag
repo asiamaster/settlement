@@ -23,8 +23,8 @@
             width:'95%',
             height:500,
             btns:[
-                {label: '取消',className: 'btn-secondary'},
-                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}
+                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
+                {label: '取消',className: 'btn-secondary'}
             ]
         });
     }
@@ -33,14 +33,11 @@
     function dialogCertainClickHandler(e, $iframe) {
         bui.loading.show('数据验证中，请稍候。。。');
         let win = $iframe[0].contentWindow;
-        if (!win.validatePayForm()) {
+        if (!win.validateRefundForm()) {
             bui.loading.hide();
             return false;
         }
         bui.loading.hide();
-        if (!$iframe.contents().find('#form-refund').valid()) {
-            return false;
-        }
         bui.loading.show('努力提交中，请稍候。。。');
         $.ajax({
             type:"POST",

@@ -23,8 +23,8 @@
             width: '95%',
             height: 500,
             btns:[
-                {label: '取消',className: 'btn-secondary'},
-                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}
+                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
+                {label: '取消',className: 'btn-secondary'}
             ]
         });
     }
@@ -33,7 +33,7 @@
     function dialogCertainClickHandler(e, $iframe) {
         bui.loading.show('数据验证中，请稍候。。。');
         let win = $iframe[0].contentWindow;
-        if (!win.validateRefundForm()) {
+        if (!win.validatePayForm()) {
             bui.loading.hide();
             return false;
         }
