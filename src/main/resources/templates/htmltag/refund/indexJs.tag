@@ -23,8 +23,8 @@
             width:'95%',
             height:500,
             btns:[
-                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler},
-                {label: '取消',className: 'btn-secondary'}
+                {label: '取消',className: 'btn-secondary'},
+                {label: '确定',className: 'btn-primary',onClick:dialogCertainClickHandler}
             ]
         });
     }

@@ -58,7 +58,7 @@
             } else {
                 showInfo(info.message);
             }
-        }, 50);
+        }, 20);
     }
 
     /** 身份证刷卡处理 */
@@ -74,7 +74,7 @@
             } else {
                 callback(info.IDCardNo);
             }
-        }, 50);
+        }, 20);
     }
 
     /** 密码设备处理 */
@@ -92,7 +92,7 @@
             } else {
                 showInfo(info.message);
             }
-        }, 50);
+        }, 20);
     }
 
     /** 查询账户信息 */
