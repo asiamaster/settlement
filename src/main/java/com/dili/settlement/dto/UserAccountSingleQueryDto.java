@@ -18,6 +18,8 @@ public class UserAccountSingleQueryDto implements Serializable {
     private Long accountId;
     /** 卡号 */
     private String cardNo;
+    /** 市场ID */
+    private Long firmId;
 
     public Long getAccountPkId() {
         return accountPkId;
@@ -50,7 +52,15 @@ public class UserAccountSingleQueryDto implements Serializable {
     public void setCardNo(String cardNo) {
         this.cardNo = cardNo;
     }
-    
+
+    public Long getFirmId() {
+        return firmId;
+    }
+
+    public void setFirmId(Long firmId) {
+        this.firmId = firmId;
+    }
+
     public static UserAccountSingleQueryDto newDto(Long accountId) {
     	UserAccountSingleQueryDto userAccountSingleQueryDto = new UserAccountSingleQueryDto();
     	userAccountSingleQueryDto.setAccountId(accountId);

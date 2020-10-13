@@ -33,6 +33,7 @@ public class AccountQueryController implements IBaseController{
     @ResponseBody
     public BaseOutput<UserAccountCardResponseDto> findSingle(UserAccountSingleQueryDto cardQuery) {
         try {
+            cardQuery.setFirmId(getUserTicket().getFirmId());
             return accountQueryRpc.findSingle(cardQuery);
         } catch (Exception e) {
             LOGGER.error("findSingle", e);
