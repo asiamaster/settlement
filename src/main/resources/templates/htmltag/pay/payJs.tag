@@ -8,6 +8,9 @@
     /** 支付方式值改变事件处理器 */
     function wayRadioChangeHandler() {
         let way = $('input[name="way"]:checked').val();
+        if (!way) {
+            return;
+        }
         $('#div-special').load("/settleOrder/forwardPaySpecial.html?way="+way);
     }
 
