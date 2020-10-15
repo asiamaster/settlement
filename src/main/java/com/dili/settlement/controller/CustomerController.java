@@ -9,6 +9,7 @@ import com.dili.settlement.dto.UserAccountSingleQueryDto;
 import com.dili.settlement.rpc.AccountQueryRpc;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.exception.BusinessException;
+import com.dili.uap.sdk.domain.UserTicket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,9 @@ public class CustomerController implements IBaseController {
     @ResponseBody
     public BaseOutput<List<Customer>> list(CustomerDto param) {
         try {
-            CustomerQueryInput query = createQuery(param);
-            query.setMarketId(getUserTicket().getFirmId());
+            UserTicket userTicket = getUserTicket();
+            CustomerQueryInput query = createQuery(param, userTicket);
+            query.setMarketId(userTicket.getFirmId());
             return customerRpc.list(query);
         } catch (BusinessException e) {
             return BaseOutput.failure(e.getMessage());
@@ -63,7 +65,7 @@ public class CustomerController implements IBaseController {
      * @param param
      * @return
      */
-    private CustomerQueryInput createQuery(CustomerDto param) {
+    private CustomerQueryInput createQuery(CustomerDto param, UserTicket userTicket) {
         CustomerQueryInput query = new CustomerQueryInput();
         if (QUERY_TYPE_1.equals(param.getQueryType())) {
             query.setName(param.getKeyword());
@@ -76,6 +78,7 @@ public class CustomerController implements IBaseController {
         if (QUERY_TYPE_3.equals(param.getQueryType())) {
             UserAccountSingleQueryDto userAccountSingleQueryDto = new UserAccountSingleQueryDto();
             userAccountSingleQueryDto.setCardNo(param.getKeyword());
+            userAccountSingleQueryDto.setFirmId(userTicket.getFirmId());
             BaseOutput<UserAccountCardResponseDto> baseOutput = accountQueryRpc.findSingle(userAccountSingleQueryDto);
             if (!baseOutput.isSuccess()) {
                 throw new BusinessException("", baseOutput.getMessage());
