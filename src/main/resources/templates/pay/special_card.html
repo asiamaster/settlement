@@ -140,7 +140,7 @@
             },
             success:function(ret) {
                 if (ret.code !== "200") {
-                    showError("密码错误");
+                    showError(ret.message);
                     return;
                 }
                 flag = true;
