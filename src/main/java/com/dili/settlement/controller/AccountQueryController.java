@@ -1,11 +1,15 @@
 package com.dili.settlement.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.dili.settlement.component.FirmIdHolder;
 import com.dili.settlement.dto.AccountSimpleResponseDto;
 import com.dili.settlement.dto.UserAccountCardResponseDto;
 import com.dili.settlement.dto.UserAccountSingleQueryDto;
+import com.dili.settlement.dto.pay.PasswordRequestDto;
 import com.dili.settlement.rpc.AccountQueryRpc;
+import com.dili.settlement.rpc.PayRpc;
 import com.dili.ss.domain.BaseOutput;
+import com.dili.ss.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,8 @@ public class AccountQueryController implements IBaseController{
 
     @Autowired
     private AccountQueryRpc accountQueryRpc;
-
+    @Autowired
+    private PayRpc payRpc;
     /**
      * 查询账户信息
      * @param cardQuery
@@ -57,6 +62,29 @@ public class AccountQueryController implements IBaseController{
         } catch (Exception e) {
             LOGGER.error("getInfoByCardNo", e);
             return BaseOutput.failure();
+        }
+    }
+
+    /**
+     * 校验验证密码
+     * @param passwordRequest
+     * @return
+     */
+    @RequestMapping(value = "/validatePayPassword.action")
+    public BaseOutput<?> validatePayPassword(PasswordRequestDto passwordRequest) {
+        try {
+            if (passwordRequest.getAccountId() == null || StrUtil.isBlank(passwordRequest.getPassword())) {
+                return BaseOutput.failure("校验支付密码接口参数错误");
+            }
+            FirmIdHolder.set(getUserTicket().getFirmId());
+            BaseOutput baseOutput = payRpc.validatePayPassword(passwordRequest);
+            FirmIdHolder.clear();
+            return baseOutput;
+        } catch (BusinessException e) {
+            return BaseOutput.failure(e.getMessage());
+        } catch (Exception e) {
+            LOGGER.error("");
+            return BaseOutput.failure("校验支付密码失败,请稍后重试");
         }
     }
 }

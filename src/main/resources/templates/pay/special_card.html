@@ -126,6 +126,29 @@
             showInfo("账户余额不足");
             return false;
         }
-        return true;
+        //提前校验密码
+        let password = $('#tradePassword').val();
+        let flag = false;
+        $.ajax({
+            url:"/accountQuery/validatePayPassword.action",
+            type:"POST",
+            dataType:"json",
+            async:false,
+            data:{
+                "accountId":tradeFundAccountId,
+                "password":password
+            },
+            success:function(ret) {
+                if (ret.code !== "200") {
+                    showError("密码错误");
+                    return;
+                }
+                flag = true;
+            },
+            error:function() {
+                showError("校验支付密码失败,请稍后重试");
+            }
+        });
+        return flag;
     }
 </script>
