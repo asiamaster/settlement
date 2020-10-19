@@ -71,6 +71,7 @@ public class AccountQueryController implements IBaseController{
      * @return
      */
     @RequestMapping(value = "/validatePayPassword.action")
+    @ResponseBody
     public BaseOutput<?> validatePayPassword(PasswordRequestDto passwordRequest) {
         try {
             if (passwordRequest.getAccountId() == null || StrUtil.isBlank(passwordRequest.getPassword())) {
