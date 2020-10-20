@@ -9,13 +9,13 @@
     <div class="col-4">
         <% if (isNotEmpty(settleOrder) && settleOrder.editEnable == 1) {%>
         <div class="input-group">
-            <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required value="${settleOrder.tradeCardNo!}"/>
+            <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required/>
             <div class="input-group-append">
                 <span class="input-group-text"><a id="cardReader" href="javascript:;">刷园区卡</a></span>
             </div>
         </div>
         <% } else {%>
-        <input type="text" name="cardNo" id="cardNo" class="form-control" maxlength="20" required readonly/>
+        <input type="text" name="cardNo" id="cardNo" value="${settleOrder.tradeCardNo!}" class="form-control" maxlength="20" required readonly/>
         <% } %>
     </div>
 </div>
