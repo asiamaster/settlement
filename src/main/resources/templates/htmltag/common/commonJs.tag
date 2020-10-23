@@ -34,7 +34,7 @@
             },
             success:function(result) {
                 if (result.code === '200') {
-                    callbackObj.printPreview(JSON.stringify(result.data.item), result.data.name, 0);
+                    callbackObj.boothPrintPreview(JSON.stringify(result.data.item), result.data.name, 0);
                 }
             },
             error:function() {
