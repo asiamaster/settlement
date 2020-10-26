@@ -93,7 +93,7 @@ public class SettleOrderController implements IBaseController {
     public String listPayOrders(Long customerId) {
         try {
             if (customerId == null) {
-                return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+                return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
             }
             UserTicket userTicket = getUserTicket();
             SettleOrderDto query = new SettleOrderDto();
@@ -104,12 +104,12 @@ public class SettleOrderController implements IBaseController {
             query.setConvert(true);
             BaseOutput<List<SettleOrder>> baseOutput = settleRpc.list(query);
             if (baseOutput.isSuccess()) {
-                return new EasyuiPageOutput(baseOutput.getData().size(), baseOutput.getData()).toString();
+                return new EasyuiPageOutput((long) baseOutput.getData().size(), baseOutput.getData()).toString();
             }
-            return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
         } catch (Exception e) {
             LOGGER.error("method listPayOrders", e);
-            return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
         }
     }
 
@@ -132,7 +132,7 @@ public class SettleOrderController implements IBaseController {
     public String listRefundOrders(Long customerId) {
         try {
             if (customerId == null) {
-                return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+                return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
             }
             UserTicket userTicket = getUserTicket();
             SettleOrderDto query = new SettleOrderDto();
@@ -143,12 +143,12 @@ public class SettleOrderController implements IBaseController {
             query.setConvert(true);
             BaseOutput<List<SettleOrder>> baseOutput = settleRpc.list(query);
             if (baseOutput.isSuccess()) {
-                return new EasyuiPageOutput(baseOutput.getData().size(), baseOutput.getData()).toString();
+                return new EasyuiPageOutput((long)baseOutput.getData().size(), baseOutput.getData()).toString();
             }
-            return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
         } catch (Exception e) {
             LOGGER.error("method listRefundOrders", e);
-            return new EasyuiPageOutput(0, new ArrayList<SettleOrder>(0)).toString();
+            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
         }
     }
 
@@ -374,7 +374,7 @@ public class SettleOrderController implements IBaseController {
     public String listPage(SettleOrderDto settleOrderDto) {
         try {
             if (CollUtil.isEmpty(settleOrderDto.getBusinessTypeList())) {
-                return new EasyuiPageOutput(0, new ArrayList(0)).toString();
+                return new EasyuiPageOutput(0L, new ArrayList(0)).toString();
             }
             UserTicket userTicket = getUserTicket();
             settleOrderDto.setMarketId(userTicket.getFirmId());
@@ -387,7 +387,7 @@ public class SettleOrderController implements IBaseController {
         } catch (Exception e) {
             LOGGER.error("method listPage", e);
         }
-        return new EasyuiPageOutput(0, new ArrayList(0)).toString();
+        return new EasyuiPageOutput(0L, new ArrayList(0)).toString();
     }
 
     /**
