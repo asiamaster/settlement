@@ -163,6 +163,18 @@
             }
         });
     }
+
+    /** 行样式处理器 */
+    function rowStyleHandler(row, index) {
+        if (row.reverse === ${@com.dili.settlement.enums.ReverseEnum.YES.getCode()}) {
+            return {
+                css:{
+                    background: '#FFE0E0'
+                }
+            }
+        }
+        return {};
+    }
 </script>
 
 <script id="template-business-type" type="text/html">
