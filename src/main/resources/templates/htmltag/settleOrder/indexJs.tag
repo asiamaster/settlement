@@ -123,7 +123,7 @@
         }
         let row = rows[0];
         if (!row.printEnable) {
-            showWarning("已处理记录才能补打票据");
+            showWarning("非冲正单且状态为已处理记录才能补打票据");
             return;
         }
         let message = '是否确认补打 '+row.businessCode+' 票据?';

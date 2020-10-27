@@ -13,10 +13,7 @@ import com.dili.settlement.dto.ApplicationConfigDto;
 import com.dili.settlement.dto.PrintDto;
 import com.dili.settlement.dto.SettleOrderDto;
 import com.dili.settlement.dto.SettleResultDto;
-import com.dili.settlement.enums.ConfigStateEnum;
-import com.dili.settlement.enums.SettleGroupCodeEnum;
-import com.dili.settlement.enums.SettleStateEnum;
-import com.dili.settlement.enums.SettleTypeEnum;
+import com.dili.settlement.enums.*;
 import com.dili.settlement.rpc.BusinessRpc;
 import com.dili.settlement.rpc.SettleRpc;
 import com.dili.settlement.service.SettleWayService;
@@ -92,25 +89,36 @@ public class SettleOrderController implements IBaseController {
     @ResponseBody
     public String listPayOrders(Long customerId) {
         try {
-            if (customerId == null) {
-                return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
-            }
-            UserTicket userTicket = getUserTicket();
-            SettleOrderDto query = new SettleOrderDto();
-            query.setType(SettleTypeEnum.PAY.getCode());
-            query.setState(SettleStateEnum.WAIT_DEAL.getCode());
-            query.setCustomerId(customerId);
-            query.setMarketId(userTicket.getFirmId());
-            query.setConvert(true);
-            BaseOutput<List<SettleOrder>> baseOutput = settleRpc.list(query);
-            if (baseOutput.isSuccess()) {
-                return new EasyuiPageOutput((long) baseOutput.getData().size(), baseOutput.getData()).toString();
-            }
-            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
+            return listSettleOrders(customerId, SettleTypeEnum.PAY.getCode());
         } catch (Exception e) {
             LOGGER.error("method listPayOrders", e);
             return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
         }
+    }
+
+    /**
+     * 提取公共查询结算单方法
+     * @param customerId
+     * @param type
+     * @return
+     */
+    private String listSettleOrders(Long customerId, Integer type) {
+        if (customerId == null) {
+            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
+        }
+        UserTicket userTicket = getUserTicket();
+        SettleOrderDto query = new SettleOrderDto();
+        query.setType(type);
+        query.setState(SettleStateEnum.WAIT_DEAL.getCode());
+        query.setCustomerId(customerId);
+        query.setMarketId(userTicket.getFirmId());
+        query.setReverse(ReverseEnum.NO.getCode());
+        query.setConvert(true);
+        BaseOutput<List<SettleOrder>> baseOutput = settleRpc.list(query);
+        if (baseOutput.isSuccess()) {
+            return new EasyuiPageOutput((long) baseOutput.getData().size(), baseOutput.getData()).toString();
+        }
+        return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
     }
 
     /**
@@ -131,21 +139,7 @@ public class SettleOrderController implements IBaseController {
     @ResponseBody
     public String listRefundOrders(Long customerId) {
         try {
-            if (customerId == null) {
-                return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
-            }
-            UserTicket userTicket = getUserTicket();
-            SettleOrderDto query = new SettleOrderDto();
-            query.setType(SettleTypeEnum.REFUND.getCode());
-            query.setState(SettleStateEnum.WAIT_DEAL.getCode());
-            query.setCustomerId(customerId);
-            query.setMarketId(userTicket.getFirmId());
-            query.setConvert(true);
-            BaseOutput<List<SettleOrder>> baseOutput = settleRpc.list(query);
-            if (baseOutput.isSuccess()) {
-                return new EasyuiPageOutput((long)baseOutput.getData().size(), baseOutput.getData()).toString();
-            }
-            return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
+            return listSettleOrders(customerId, SettleTypeEnum.REFUND.getCode());
         } catch (Exception e) {
             LOGGER.error("method listRefundOrders", e);
             return new EasyuiPageOutput(0L, new ArrayList<SettleOrder>(0)).toString();
