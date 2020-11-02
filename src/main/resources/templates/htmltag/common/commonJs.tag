@@ -9,7 +9,7 @@
         if (row.reverse === ${@com.dili.settlement.enums.ReverseEnum.YES.getCode()}) {
             return;
         }
-        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.type+','+row.appId+','+row.businessType+',\''+row.orderCode+'\');return false;">'+value+'</a>'
+        return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.type+','+row.appId+','+row.businessType+',\''+row.orderCode+'\');return false;">'+value+'</a>';
     }
 
     /** 查看业务详情处理器 */
