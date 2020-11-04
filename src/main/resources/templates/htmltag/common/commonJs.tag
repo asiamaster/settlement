@@ -7,7 +7,7 @@
     /** 业务编号格式器 */
     function businessCodeFormatter(value, row, index) {
         if (row.reverse === ${@com.dili.settlement.enums.ReverseEnum.YES.getCode()}) {
-            return;
+            return value;
         }
         return '<a href="javascript:;" onclick="showBusinessDetailHandler('+row.type+','+row.appId+','+row.businessType+',\''+row.orderCode+'\');return false;">'+value+'</a>';
     }
