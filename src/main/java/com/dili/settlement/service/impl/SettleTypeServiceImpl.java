@@ -1,8 +1,11 @@
 package com.dili.settlement.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.dili.settlement.domain.SettleOrder;
 import com.dili.settlement.dto.ApplicationConfigDto;
+import com.dili.settlement.enums.ReverseEnum;
 import com.dili.settlement.rpc.SettleRpc;
+import com.dili.settlement.rpc.resolver.GenericRpcResolver;
 import com.dili.settlement.service.SettleTypeService;
 import com.dili.ss.domain.BaseOutput;
 import com.dili.ss.exception.BusinessException;
@@ -27,6 +30,14 @@ public abstract class SettleTypeServiceImpl implements SettleTypeService {
         }
         if (StrUtil.isBlank(query.getOrderCode())) {
             throw new BusinessException("", "订单号为空");
+        }
+        if (query.getReverse() == null) {
+            throw new BusinessException("", "红冲标记为空");
+        }
+        if (Integer.valueOf(ReverseEnum.YES.getCode()).equals(query.getReverse())) {
+            //按照现有逻辑，如果是红冲单则order_code字段存储的是结算单号，所以通过获取原单来order_code值来构建查看详情
+            SettleOrder settleOrder = GenericRpcResolver.resolver(settleRpc.getByCode(query.getOrderCode()), "settlement-service");
+            query.setOrderCode(settleOrder.getOrderCode());
         }
     }
 

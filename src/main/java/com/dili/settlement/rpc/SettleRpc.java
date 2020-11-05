@@ -29,6 +29,14 @@ public interface SettleRpc {
     BaseOutput<SettleOrder> getById(@RequestParam Long id);
 
     /**
+     * 根据ID查询结算单
+     * @param code
+     * @return
+     */
+    @RequestMapping(value = "/api/settleOrder/getByCode", method = RequestMethod.GET)
+    BaseOutput<SettleOrder> getByCode(@RequestParam String code);
+
+    /**
      * 查询结算单
      * @param settleOrderDto
      * @return
